@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -27,263 +28,93 @@
     padding: 24px;
   }
   .container { max-width: 1400px; margin: 0 auto; }
-
   header {
-    border-bottom: 1px solid var(--border);
-    padding-bottom: 24px; margin-bottom: 32px;
-    display: flex; justify-content: space-between; align-items: flex-end;
-    flex-wrap: wrap; gap: 20px;
+    border-bottom: 1px solid var(--border); padding-bottom: 24px;
+    margin-bottom: 32px; display: flex; justify-content: space-between;
+    align-items: flex-end; flex-wrap: wrap; gap: 20px;
   }
-  .brand h1 {
-    font-family: 'Fraunces', serif; font-weight: 300;
-    font-size: clamp(28px, 4vw, 44px); letter-spacing: -0.02em;
-    line-height: 1; font-style: italic;
-  }
+  .brand h1 { font-family: 'Fraunces', serif; font-weight: 300; font-size: clamp(28px, 4vw, 44px); letter-spacing: -0.02em; line-height: 1; font-style: italic; }
   .brand h1 span { color: var(--gold); font-style: normal; font-weight: 500; }
-  .brand .subtitle {
-    font-size: 11px; text-transform: uppercase; letter-spacing: 0.25em;
-    color: var(--text-muted); margin-top: 12px;
-  }
-  .status {
-    font-size: 11px; text-transform: uppercase; letter-spacing: 0.15em;
-    color: var(--text-dim);
-  }
-  .btn-minimal {
-    background: transparent; border: 1px solid var(--border-light);
-    color: var(--text-dim); padding: 6px 14px;
-    font-family: inherit; font-size: 10px;
-    letter-spacing: 0.2em; text-transform: uppercase;
-    cursor: pointer; transition: all 0.2s;
-  }
+  .brand .subtitle { font-size: 11px; text-transform: uppercase; letter-spacing: 0.25em; color: var(--text-muted); margin-top: 12px; }
+  .status { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; font-size: 11px; letter-spacing: 0.15em; color: var(--text-dim); }
+  .status-row { display: flex; align-items: center; gap: 10px; }
+  .pulse { width: 8px; height: 8px; border-radius: 50%; background: var(--up); animation: pulse 2s infinite; }
+  .pulse.offline { background: var(--down); }
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+  .btn-minimal { background: transparent; border: 1px solid var(--border-light); color: var(--text-dim); padding: 6px 14px; font-family: inherit; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; cursor: pointer; transition: all 0.2s; }
   .btn-minimal:hover { border-color: var(--gold); color: var(--gold); }
-  .btn-primary {
-    background: var(--gold); color: var(--bg);
-    border: 1px solid var(--gold); padding: 8px 16px;
-    font-family: inherit; font-size: 11px;
-    letter-spacing: 0.15em; text-transform: uppercase;
-    cursor: pointer; font-weight: 700;
-  }
-  .btn-primary:hover { background: var(--gold-bright); border-color: var(--gold-bright); }
+  .btn-primary { background: var(--gold); color: var(--bg); border: 1px solid var(--gold); padding: 8px 16px; font-family: inherit; font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; cursor: pointer; font-weight: 700; }
+  .btn-primary:hover { background: var(--gold-bright); }
 
-  nav {
-    display: flex; gap: 0; margin-bottom: 40px;
-    border-bottom: 1px solid var(--border);
-  }
-  nav a {
-    padding: 14px 24px; color: var(--text-muted); text-decoration: none;
-    font-size: 11px; letter-spacing: 0.25em; text-transform: uppercase;
-    border-bottom: 2px solid transparent; transition: all 0.2s;
-    margin-bottom: -1px;
-  }
+  nav { display: flex; gap: 0; margin-bottom: 24px; border-bottom: 1px solid var(--border); }
+  nav a { padding: 14px 24px; color: var(--text-muted); text-decoration: none; font-size: 11px; letter-spacing: 0.25em; text-transform: uppercase; border-bottom: 2px solid transparent; margin-bottom: -1px; }
   nav a:hover { color: var(--text); }
   nav a.active { color: var(--gold); border-bottom-color: var(--gold); }
 
-  .section { margin-bottom: 48px; }
-  .section-title {
-    font-family: 'Fraunces', serif; font-size: 13px; font-weight: 500;
-    text-transform: uppercase; letter-spacing: 0.3em;
-    color: var(--gold); margin-bottom: 20px;
-    padding-bottom: 12px; border-bottom: 1px solid var(--border);
-    display: flex; align-items: center; gap: 12px;
-  }
-  .section-title::before {
-    content: ''; width: 6px; height: 6px;
-    background: var(--gold); transform: rotate(45deg);
-  }
-  .section-title .count {
-    margin-left: auto; color: var(--text-muted);
-    font-size: 10px; letter-spacing: 0.2em;
-  }
+  .sync-banner { background: rgba(125, 200, 140, 0.08); border: 1px solid var(--up); padding: 10px 16px; margin-bottom: 20px; font-size: 11px; color: var(--text-dim); display: flex; align-items: center; gap: 10px; }
+  .sync-banner.offline { background: rgba(226, 125, 125, 0.08); border-color: var(--down); }
 
-  /* IHSG Main Chart */
-  .tv-main-chart {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    padding: 2px;
-    height: 520px;
-  }
+  .section { margin-bottom: 48px; }
+  .section-title { font-family: 'Fraunces', serif; font-size: 13px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.3em; color: var(--gold); margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 12px; }
+  .section-title::before { content: ''; width: 6px; height: 6px; background: var(--gold); transform: rotate(45deg); }
+  .section-title .count { margin-left: auto; color: var(--text-muted); font-size: 10px; letter-spacing: 0.2em; }
+
+  .tv-main-chart { background: var(--bg-card); border: 1px solid var(--border); padding: 2px; height: 520px; }
   .tv-main-chart > div { height: 100%; }
 
-  .toolbar {
-    display: flex; gap: 10px; flex-wrap: wrap;
-    margin-bottom: 20px; align-items: center;
-  }
-  .toolbar .add-form {
-    display: flex; gap: 8px; flex: 1; max-width: 400px;
-  }
-  .toolbar input {
-    flex: 1; background: var(--bg-card);
-    border: 1px solid var(--border-light);
-    color: var(--text); padding: 8px 12px;
-    font-family: inherit; font-size: 12px;
-    text-transform: uppercase; letter-spacing: 0.1em;
-  }
+  .toolbar { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; align-items: center; }
+  .toolbar .add-form { display: flex; gap: 8px; flex: 1; max-width: 400px; }
+  .toolbar input { flex: 1; background: var(--bg-card); border: 1px solid var(--border-light); color: var(--text); padding: 8px 12px; font-family: inherit; font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em; }
   .toolbar input:focus { outline: none; border-color: var(--gold); }
 
-  /* Stock grid - Symbol Overview widget per card */
-  .stock-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 16px;
-  }
-  .stock-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    transition: all 0.3s;
-    cursor: pointer;
-    overflow: hidden;
-    position: relative;
-    height: 280px;
-  }
-  .stock-card:hover {
-    border-color: var(--gold);
-    transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(201, 169, 74, 0.08);
-  }
-
-  .stock-card-widget {
-    width: 100%;
-    height: 100%;
-    position: relative;
-  }
-
-  .stock-card-placeholder {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    pointer-events: none;
-    z-index: 0;
-  }
-  .stock-card-placeholder .ph-ticker {
-    font-family: 'Fraunces', serif;
-    font-size: 28px;
-    font-weight: 500;
-    color: var(--gold);
-    opacity: 0.4;
-  }
-  .stock-card-placeholder .ph-loading {
-    font-size: 10px;
-    color: var(--text-muted);
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-  }
-
-  .remove-btn {
-    position: absolute; top: 8px; right: 8px;
-    background: rgba(11, 11, 13, 0.85);
-    border: 1px solid var(--border-light);
-    color: var(--text-dim); font-size: 14px;
-    cursor: pointer; opacity: 0; transition: opacity 0.2s;
-    width: 26px; height: 26px;
-    display: flex; align-items: center; justify-content: center;
-    z-index: 10;
-    border-radius: 2px;
-  }
+  .stock-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; }
+  .stock-card { background: var(--bg-card); border: 1px solid var(--border); transition: all 0.3s; cursor: pointer; overflow: hidden; position: relative; height: 280px; }
+  .stock-card:hover { border-color: var(--gold); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(201, 169, 74, 0.08); }
+  .stock-card-widget { width: 100%; height: 100%; position: relative; }
+  .stock-card-placeholder { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; pointer-events: none; z-index: 0; }
+  .stock-card-placeholder .ph-ticker { font-family: 'Fraunces', serif; font-size: 28px; font-weight: 500; color: var(--gold); opacity: 0.4; }
+  .stock-card-placeholder .ph-loading { font-size: 10px; color: var(--text-muted); letter-spacing: 0.2em; text-transform: uppercase; }
+  .remove-btn { position: absolute; top: 8px; right: 8px; background: rgba(11, 11, 13, 0.85); border: 1px solid var(--border-light); color: var(--text-dim); font-size: 14px; cursor: pointer; opacity: 0; transition: opacity 0.2s; width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; z-index: 10; }
   .stock-card:hover .remove-btn { opacity: 1; }
   .remove-btn:hover { color: var(--down); border-color: var(--down); }
 
-  .click-hint {
-    position: absolute;
-    bottom: 6px; left: 50%;
-    transform: translateX(-50%);
-    background: rgba(11, 11, 13, 0.85);
-    color: var(--text-dim);
-    padding: 3px 10px;
-    font-size: 9px;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    opacity: 0;
-    transition: opacity 0.2s;
-    pointer-events: none;
-    z-index: 5;
-    border: 1px solid var(--border-light);
-  }
-  .stock-card:hover .click-hint { opacity: 1; }
-
-  /* MODAL — fixed sizing */
-  .modal-overlay {
-    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(0, 0, 0, 0.85);
-    backdrop-filter: blur(8px);
-    z-index: 1000;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-  }
+  .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(8px); z-index: 1000; display: none; align-items: center; justify-content: center; padding: 20px; }
   .modal-overlay.active { display: flex; }
-
-  .modal {
-    background: var(--bg-card);
-    border: 1px solid var(--gold);
-    width: 100%;
-    max-width: 1200px;
-    height: 88vh;
-    max-height: 800px;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-  }
-  .modal-head {
-    flex: 0 0 auto;
-    display: flex; justify-content: space-between; align-items: center;
-    padding: 16px 20px; border-bottom: 1px solid var(--border);
-  }
-  .modal-title {
-    font-family: 'Fraunces', serif;
-    font-size: 20px; color: var(--gold);
-    letter-spacing: 0.05em;
-  }
-  .modal-close {
-    background: transparent; border: 1px solid var(--border-light);
-    color: var(--text-dim); font-size: 14px;
-    cursor: pointer; padding: 6px 14px;
-    font-family: inherit; letter-spacing: 0.15em;
-    text-transform: uppercase;
-  }
+  .modal { background: var(--bg-card); border: 1px solid var(--gold); width: 100%; max-width: 1200px; height: 88vh; max-height: 800px; display: flex; flex-direction: column; overflow: hidden; }
+  .modal-head { flex: 0 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 16px 20px; border-bottom: 1px solid var(--border); }
+  .modal-title { font-family: 'Fraunces', serif; font-size: 20px; color: var(--gold); letter-spacing: 0.05em; }
+  .modal-close { background: transparent; border: 1px solid var(--border-light); color: var(--text-dim); font-size: 14px; cursor: pointer; padding: 6px 14px; font-family: inherit; letter-spacing: 0.15em; text-transform: uppercase; }
   .modal-close:hover { color: var(--down); border-color: var(--down); }
+  .modal-body { flex: 1 1 auto; min-height: 0; position: relative; }
+  #tv-modal-chart { position: absolute; inset: 0; width: 100%; height: 100%; }
 
-  .modal-body {
-    flex: 1 1 auto;
-    min-height: 0;
-    position: relative;
-  }
-  #tv-modal-chart {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-  }
-
-  .info-banner {
-    background: rgba(201, 169, 74, 0.05);
-    border: 1px solid rgba(201, 169, 74, 0.3);
-    padding: 14px 20px; margin-bottom: 24px;
-    font-size: 11px; color: var(--text-dim);
-    line-height: 1.7;
-    letter-spacing: 0.03em;
-  }
+  .info-banner { background: rgba(201, 169, 74, 0.05); border: 1px solid rgba(201, 169, 74, 0.3); padding: 14px 20px; margin-bottom: 24px; font-size: 11px; color: var(--text-dim); line-height: 1.7; letter-spacing: 0.03em; }
   .info-banner b { color: var(--gold); }
-  .info-banner a { color: var(--gold); text-decoration: none; border-bottom: 1px dashed; }
 
-  footer {
-    margin-top: 60px; padding-top: 24px; border-top: 1px solid var(--border);
-    text-align: center; font-size: 10px; color: var(--text-muted);
-    letter-spacing: 0.2em; text-transform: uppercase;
-  }
+  /* Alerts section */
+  .alerts-table { background: var(--bg-card); border: 1px solid var(--border); }
+  .alert-row { display: grid; grid-template-columns: 60px 120px 80px 1fr 40px; gap: 16px; padding: 12px 20px; border-bottom: 1px solid var(--border); align-items: center; font-size: 13px; }
+  .alert-row:last-child { border-bottom: none; }
+  .alert-row:hover { background: var(--bg-elev); }
+  .alert-head { background: var(--bg-elev); color: var(--text-muted); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; }
+  .alert-id { color: var(--text-muted); }
+  .alert-ticker { color: var(--gold); font-weight: 700; }
+  .alert-op-price { text-align: left; }
+  .alert-delete { background: transparent; border: 1px solid var(--border-light); color: var(--text-muted); cursor: pointer; width: 24px; height: 24px; font-size: 12px; }
+  .alert-delete:hover { color: var(--down); border-color: var(--down); }
+
+  .empty-state { text-align: center; padding: 40px 20px; color: var(--text-muted); font-size: 12px; letter-spacing: 0.1em; }
+
+  footer { margin-top: 60px; padding-top: 24px; border-top: 1px solid var(--border); text-align: center; font-size: 10px; color: var(--text-muted); letter-spacing: 0.2em; text-transform: uppercase; }
   footer a { color: var(--text-dim); text-decoration: none; }
-  footer a:hover { color: var(--gold); }
 
   @media (max-width: 640px) {
     body { padding: 16px; }
-    nav a { padding: 12px 16px; font-size: 10px; letter-spacing: 0.15em; }
+    nav a { padding: 12px 16px; font-size: 10px; }
     .tv-main-chart { height: 400px; }
-    .modal { max-width: 100%; height: 92vh; }
     .stock-grid { grid-template-columns: 1fr; }
+    .alert-row { grid-template-columns: 40px 80px 1fr 30px; gap: 8px; font-size: 11px; }
+    .alert-row > :nth-child(3) { display: none; }
   }
 </style>
 </head>
@@ -293,10 +124,13 @@
     <header>
       <div class="brand">
         <h1><span>Saham</span> Indonesia</h1>
-        <div class="subtitle">IDX · Real-time · Powered by TradingView</div>
+        <div class="subtitle">IDX · Sync Bot · Powered by TradingView</div>
       </div>
       <div class="status">
-        <span>● Live · Klik kartu saham untuk chart full dengan indicator</span>
+        <div class="status-row">
+          <span class="pulse" id="syncPulse"></span>
+          <span id="syncStatus">Menghubungkan bot...</span>
+        </div>
       </div>
     </header>
 
@@ -305,12 +139,14 @@
       <a href="saham.html" class="active">Saham Indonesia</a>
     </nav>
 
+    <div class="sync-banner" id="syncBanner">🔄 Loading...</div>
+
     <div class="info-banner">
-      💡 <b>Tips:</b> Setiap kartu menampilkan harga terkini, % perubahan hari ini, dan mini chart.
-      Klik kartu untuk melihat chart full dengan candlestick, indicator (RSI, MA), dan analisis teknikal lengkap.<br>
-      Jam trading IDX: <b>Senin-Jumat 09:00-16:00 WIB</b>. Di luar jam ini menampilkan data penutupan terakhir.
+      💡 <b>Sync dengan bot Telegram:</b> Watchlist & alert tersimpan di bot.
+      Tambah dari sini atau dari Telegram — akan sinkron otomatis.
     </div>
 
+    <!-- IHSG Main Chart -->
     <section class="section">
       <h2 class="section-title">
         IHSG — Indeks Harga Saham Gabungan
@@ -321,26 +157,51 @@
       </div>
     </section>
 
+    <!-- Watchlist -->
     <section class="section">
       <h2 class="section-title">
-        Watchlist Saham
+        Watchlist Saham (Sync Bot)
         <span class="count" id="stockCount">—</span>
       </h2>
 
       <div class="toolbar">
         <div class="add-form">
-          <input type="text" id="addTicker" placeholder="Tambah ticker (contoh: ANTM)" maxlength="10">
+          <input type="text" id="addTicker" placeholder="Ticker (contoh: BBCA)" maxlength="10">
           <button class="btn-primary" id="addBtn">+ Tambah</button>
         </div>
-        <button class="btn-minimal" id="resetBtn">↺ Reset Default</button>
       </div>
 
-      <div class="stock-grid" id="stockGrid"></div>
+      <div class="stock-grid" id="stockGrid">
+        <div class="empty-state">Memuat watchlist...</div>
+      </div>
+    </section>
+
+    <!-- Alerts -->
+    <section class="section">
+      <h2 class="section-title">
+        Alert Harga Aktif
+        <span class="count" id="alertCount">—</span>
+      </h2>
+
+      <div class="toolbar">
+        <div class="add-form" style="max-width: 600px;">
+          <input type="text" id="alertTicker" placeholder="Ticker" maxlength="10" style="max-width: 100px;">
+          <select id="alertOp" style="background: var(--bg-card); border: 1px solid var(--border-light); color: var(--text); padding: 8px; font-family: inherit;">
+            <option value=">">&gt; di atas</option>
+            <option value="<">&lt; di bawah</option>
+          </select>
+          <input type="number" id="alertPrice" placeholder="Harga" step="1" min="1">
+          <button class="btn-primary" id="alertAddBtn">+ Set Alert</button>
+        </div>
+      </div>
+
+      <div class="alerts-table" id="alertsTable">
+        <div class="empty-state">Memuat alerts...</div>
+      </div>
     </section>
 
     <footer>
-      Data & Charts oleh <a href="https://www.tradingview.com" target="_blank">TradingView</a>
-      &nbsp;·&nbsp; Tidak butuh API key
+      Data oleh TradingView · Sync dengan bot Telegram · Tidak butuh API key TradingView
     </footer>
 
   </div>
@@ -351,266 +212,350 @@
         <div class="modal-title" id="modalTitle">—</div>
         <button class="modal-close" id="modalClose">✕ Tutup</button>
       </div>
-      <div class="modal-body">
-        <div id="tv-modal-chart"></div>
-      </div>
+      <div class="modal-body"><div id="tv-modal-chart"></div></div>
     </div>
   </div>
 
 <script>
-  const DEFAULT_STOCKS = [
-    { ticker: 'BBCA', name: 'Bank Central Asia' },
-    { ticker: 'BBRI', name: 'Bank Rakyat Indonesia' },
-    { ticker: 'BMRI', name: 'Bank Mandiri' },
-    { ticker: 'BBNI', name: 'Bank Negara Indonesia' },
-    { ticker: 'PTRO', name: 'Petrosea' },
-    { ticker: 'PTBA', name: 'Bukit Asam' },
-    { ticker: 'BUMI', name: 'Bumi Resources' },
-    { ticker: 'ANTM', name: 'Aneka Tambang' },
-    { ticker: 'TLKM', name: 'Telkom Indonesia' },
-    { ticker: 'ASII', name: 'Astra International' },
-    { ticker: 'UNVR', name: 'Unilever Indonesia' },
-    { ticker: 'GOTO', name: 'GoTo Gojek Tokopedia' },
-  ];
+// ==========================================================
+// CONFIG (from localStorage, set in index.html)
+// ==========================================================
+const LS_BOT_URL = 'bot_api_url';
+const LS_API_KEY = 'bot_api_key';
+const LS_WATCHLIST_CACHE = 'watchlist_cache';
+const LS_ALERTS_CACHE = 'alerts_cache';
 
-  const STORAGE_KEY = 'saham_watchlist_v3';
-  let watchlist = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null') || DEFAULT_STOCKS;
+let BOT_URL = localStorage.getItem(LS_BOT_URL) || '';
+let API_KEY = localStorage.getItem(LS_API_KEY) || '';
 
-  function saveWatchlist() {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(watchlist));
+const DEFAULT_STOCKS = ['BBCA', 'BBRI', 'BMRI', 'BBNI', 'PTRO', 'PTBA', 'BUMI', 'ANTM', 'TLKM', 'ASII', 'UNVR', 'GOTO'];
+
+let watchlist = [];
+let alerts = [];
+let botOnline = false;
+
+// ==========================================================
+// API CLIENT
+// ==========================================================
+async function botApi(endpoint, options = {}) {
+  if (!BOT_URL || !API_KEY) throw new Error('Bot not configured');
+  const url = `${BOT_URL.replace(/\/$/, '')}/api${endpoint}`;
+  const res = await fetch(url, {
+    ...options,
+    headers: { 'X-API-Key': API_KEY, 'Content-Type': 'application/json', ...options.headers },
+    mode: 'cors',
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ error: res.statusText }));
+    throw new Error(err.error || `HTTP ${res.status}`);
   }
+  return res.json();
+}
 
-  /**
-   * Helper untuk bikin TradingView widget secara dinamis.
-   * Menggunakan script.text (bukan innerHTML) agar parse JSON config-nya benar.
-   */
-  function injectTradingViewWidget(targetEl, scriptSrc, config) {
-    targetEl.innerHTML = '';
-
-    const wrapper = document.createElement('div');
-    wrapper.className = 'tradingview-widget-container';
-    wrapper.style.height = '100%';
-    wrapper.style.width = '100%';
-
-    const inner = document.createElement('div');
-    inner.className = 'tradingview-widget-container__widget';
-    inner.style.height = 'calc(100% - 0px)';
-    inner.style.width = '100%';
-    wrapper.appendChild(inner);
-
-    const script = document.createElement('script');
-    script.type = 'text/javascript';
-    script.src = scriptSrc;
-    script.async = true;
-    script.text = JSON.stringify(config);
-    wrapper.appendChild(script);
-
-    targetEl.appendChild(wrapper);
+function updateSyncStatus(level, msg) {
+  const pulse = document.getElementById('syncPulse');
+  const banner = document.getElementById('syncBanner');
+  const status = document.getElementById('syncStatus');
+  status.textContent = msg;
+  if (level === 'ok') {
+    pulse.classList.remove('offline');
+    banner.classList.remove('offline');
+    banner.innerHTML = '🟢 ' + msg;
+  } else {
+    pulse.classList.add('offline');
+    banner.classList.add('offline');
+    banner.innerHTML = '🔴 ' + msg;
   }
+}
 
-  // IHSG Main Chart - Advanced Chart
-  function loadIhsgChart() {
-    injectTradingViewWidget(
-      document.getElementById('tv-ihsg-chart'),
-      'https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js',
-      {
-        "autosize": true,
-        "symbol": "IDX:COMPOSITE",
-        "interval": "D",
-        "timezone": "Asia/Jakarta",
-        "theme": "dark",
-        "style": "1",
-        "locale": "id",
-        "toolbar_bg": "#17171c",
-        "enable_publishing": false,
-        "allow_symbol_change": true,
-        "backgroundColor": "#17171c",
-        "gridColor": "rgba(38, 38, 45, 0.5)",
-        "withdateranges": true,
-        "studies": ["STD;SMA"],
-        "show_popup_button": true,
-        "popup_width": "1200",
-        "popup_height": "700"
-      }
-    );
-  }
-
-  /**
-   * Symbol Overview widget - menampilkan harga + % change + mini chart
-   * Ini widget yang tepat untuk grid card.
-   */
-  function loadStockCardWidget(containerId, ticker) {
-    const container = document.getElementById(containerId);
-    if (!container) return;
-
-    // Remove placeholder once we start injecting
-    const ph = container.parentElement.querySelector('.stock-card-placeholder');
-    if (ph) ph.style.display = 'none';
-
-    injectTradingViewWidget(
-      container,
-      'https://s3.tradingview.com/external-embedding/embed-widget-symbol-overview.js',
-      {
-        "symbols": [[`IDX:${ticker}|3M`]],
-        "chartOnly": false,
-        "width": "100%",
-        "height": "100%",
-        "locale": "id",
-        "colorTheme": "dark",
-        "autosize": true,
-        "showVolume": false,
-        "showMA": false,
-        "hideDateRanges": false,
-        "hideMarketStatus": false,
-        "hideSymbolLogo": false,
-        "scalePosition": "right",
-        "scaleMode": "Normal",
-        "fontFamily": "'JetBrains Mono', monospace",
-        "fontSize": "10",
-        "noTimeScale": true,
-        "valuesTracking": "1",
-        "changeMode": "price-and-percent",
-        "chartType": "area",
-        "headerFontSize": "medium",
-        "lineColor": "rgba(201, 169, 74, 1)",
-        "topColor": "rgba(201, 169, 74, 0.3)",
-        "bottomColor": "rgba(201, 169, 74, 0)",
-        "lineWidth": 2,
-        "isTransparent": true,
-        "dateRanges": ["1d|1", "1m|30", "3m|60", "12m|1D", "60m|1W", "all|1M"]
-      }
-    );
-  }
-
-  function renderGrid() {
-    const grid = document.getElementById('stockGrid');
-    grid.innerHTML = watchlist.map(s => `
-      <div class="stock-card" data-ticker="${s.ticker}" data-name="${s.name}">
-        <button class="remove-btn" data-remove="${s.ticker}" title="Hapus">×</button>
-        <div class="stock-card-placeholder">
-          <div class="ph-ticker">${s.ticker}</div>
-          <div class="ph-loading">Memuat chart...</div>
-        </div>
-        <div class="stock-card-widget" id="widget-${s.ticker}"></div>
-        <div class="click-hint">Klik untuk chart lengkap</div>
-      </div>
-    `).join('');
-
-    document.getElementById('stockCount').textContent = `${watchlist.length} saham`;
-
-    // Load widgets dengan staggered delay untuk menghindari rate limit di TradingView
-    watchlist.forEach((s, i) => {
-      setTimeout(() => loadStockCardWidget(`widget-${s.ticker}`, s.ticker), i * 150);
-    });
-
-    // Card click -> open modal
-    grid.querySelectorAll('.stock-card').forEach(card => {
-      card.addEventListener('click', (e) => {
-        if (e.target.closest('.remove-btn')) return;
-        const ticker = card.dataset.ticker;
-        const name = card.dataset.name;
-        openModal(ticker, name);
-      });
-    });
-
-    // Remove buttons
-    grid.querySelectorAll('[data-remove]').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        removeStock(btn.dataset.remove);
-      });
-    });
-  }
-
-  function openModal(ticker, name) {
-    document.getElementById('modalTitle').textContent = `${ticker} — ${name}`;
-    document.getElementById('modalOverlay').classList.add('active');
-    document.body.style.overflow = 'hidden';
-
-    // Inject widget AFTER modal is visible, so parent has real dimensions
-    requestAnimationFrame(() => {
-      injectTradingViewWidget(
-        document.getElementById('tv-modal-chart'),
-        'https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js',
-        {
-          "autosize": true,
-          "symbol": `IDX:${ticker}`,
-          "interval": "D",
-          "timezone": "Asia/Jakarta",
-          "theme": "dark",
-          "style": "1",
-          "locale": "id",
-          "toolbar_bg": "#17171c",
-          "enable_publishing": false,
-          "allow_symbol_change": true,
-          "backgroundColor": "#17171c",
-          "gridColor": "rgba(38, 38, 45, 0.5)",
-          "withdateranges": true,
-          "hide_side_toolbar": false,
-          "studies": ["STD;SMA", "STD;RSI"]
-        }
-      );
-    });
-  }
-
-  function closeModal() {
-    document.getElementById('modalOverlay').classList.remove('active');
-    document.body.style.overflow = '';
-    document.getElementById('tv-modal-chart').innerHTML = '';
-  }
-
-  function addStock(ticker) {
-    ticker = ticker.trim().toUpperCase();
-    if (!ticker) return;
-    if (!/^[A-Z]{1,10}$/.test(ticker)) {
-      alert('Ticker hanya boleh berisi huruf (A-Z)');
+// ==========================================================
+// WATCHLIST
+// ==========================================================
+async function loadWatchlist() {
+  if (BOT_URL && API_KEY) {
+    try {
+      const data = await botApi('/watchlist');
+      watchlist = data.watchlist;
+      localStorage.setItem(LS_WATCHLIST_CACHE, JSON.stringify(watchlist));
+      botOnline = true;
+      updateSyncStatus('ok', 'Bot connected · Watchlist synced');
       return;
+    } catch (e) {
+      botOnline = false;
+      updateSyncStatus('err', 'Bot offline — pakai cache lokal');
     }
-    if (watchlist.some(s => s.ticker === ticker)) {
-      alert('Saham ' + ticker + ' sudah ada di watchlist');
-      return;
-    }
-    watchlist.push({ ticker, name: ticker });
-    saveWatchlist();
-    renderGrid();
+  } else {
+    updateSyncStatus('err', 'Bot belum dikonfigurasi (set di index.html)');
   }
-
-  function removeStock(ticker) {
-    watchlist = watchlist.filter(s => s.ticker !== ticker);
-    saveWatchlist();
-    renderGrid();
-  }
-
-  function resetDefault() {
-    if (!confirm('Reset watchlist ke daftar default?')) return;
+  // Fallback cache
+  const cache = localStorage.getItem(LS_WATCHLIST_CACHE);
+  if (cache) {
+    try { watchlist = JSON.parse(cache); } catch { watchlist = DEFAULT_STOCKS.slice(); }
+  } else {
     watchlist = DEFAULT_STOCKS.slice();
-    saveWatchlist();
-    renderGrid();
   }
+}
 
-  // Event listeners
-  document.getElementById('addBtn').addEventListener('click', () => {
-    const input = document.getElementById('addTicker');
-    addStock(input.value);
-    input.value = '';
-  });
-  document.getElementById('addTicker').addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') document.getElementById('addBtn').click();
-  });
-  document.getElementById('resetBtn').addEventListener('click', resetDefault);
-  document.getElementById('modalClose').addEventListener('click', closeModal);
-  document.getElementById('modalOverlay').addEventListener('click', (e) => {
-    if (e.target === document.getElementById('modalOverlay')) closeModal();
-  });
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && document.getElementById('modalOverlay').classList.contains('active')) {
-      closeModal();
-    }
+async function addStockToWatchlist(ticker) {
+  ticker = ticker.trim().toUpperCase();
+  if (!/^[A-Z]{1,10}$/.test(ticker)) {
+    alert('Ticker hanya boleh huruf (A-Z)');
+    return;
+  }
+  if (watchlist.includes(ticker)) {
+    alert(ticker + ' sudah ada');
+    return;
+  }
+  if (!botOnline) {
+    alert('Bot offline — tidak bisa tambah. Coba /add dari Telegram.');
+    return;
+  }
+  try {
+    await botApi('/watchlist', { method: 'POST', body: JSON.stringify({ ticker }) });
+    await loadWatchlist();
+    renderWatchlistGrid();
+  } catch (e) {
+    alert('Gagal: ' + e.message);
+  }
+}
+
+async function removeStock(ticker) {
+  if (!botOnline) {
+    alert('Bot offline — tidak bisa hapus. Coba /remove dari Telegram.');
+    return;
+  }
+  try {
+    await botApi(`/watchlist/${ticker}`, { method: 'DELETE' });
+    await loadWatchlist();
+    renderWatchlistGrid();
+  } catch (e) {
+    alert('Gagal: ' + e.message);
+  }
+}
+
+// ==========================================================
+// ALERTS
+// ==========================================================
+async function loadAlerts() {
+  if (BOT_URL && API_KEY && botOnline) {
+    try {
+      const data = await botApi('/alerts');
+      alerts = data.alerts;
+      localStorage.setItem(LS_ALERTS_CACHE, JSON.stringify(alerts));
+      return;
+    } catch (e) { /* use cache */ }
+  }
+  const cache = localStorage.getItem(LS_ALERTS_CACHE);
+  alerts = cache ? JSON.parse(cache) : [];
+}
+
+async function addAlert(ticker, operator, price) {
+  if (!botOnline) {
+    alert('Bot offline');
+    return;
+  }
+  try {
+    await botApi('/alerts', {
+      method: 'POST',
+      body: JSON.stringify({ ticker, operator, price }),
+    });
+    await loadAlerts();
+    renderAlerts();
+  } catch (e) {
+    alert('Gagal: ' + e.message);
+  }
+}
+
+async function deleteAlert(id) {
+  if (!botOnline) return;
+  try {
+    await botApi(`/alerts/${id}`, { method: 'DELETE' });
+    await loadAlerts();
+    renderAlerts();
+  } catch (e) {
+    alert('Gagal: ' + e.message);
+  }
+}
+
+// ==========================================================
+// TRADINGVIEW WIDGETS
+// ==========================================================
+function injectTV(target, scriptSrc, config) {
+  target.innerHTML = '';
+  const wrap = document.createElement('div');
+  wrap.className = 'tradingview-widget-container';
+  wrap.style.height = '100%';
+  wrap.style.width = '100%';
+  const inner = document.createElement('div');
+  inner.className = 'tradingview-widget-container__widget';
+  inner.style.height = '100%';
+  inner.style.width = '100%';
+  wrap.appendChild(inner);
+  const script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src = scriptSrc;
+  script.async = true;
+  script.text = JSON.stringify(config);
+  wrap.appendChild(script);
+  target.appendChild(wrap);
+}
+
+function loadIhsgChart() {
+  injectTV(document.getElementById('tv-ihsg-chart'),
+    'https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js', {
+      autosize: true, symbol: "IDX:COMPOSITE", interval: "D",
+      timezone: "Asia/Jakarta", theme: "dark", style: "1", locale: "id",
+      backgroundColor: "#17171c", withdateranges: true,
+    });
+}
+
+function loadStockWidget(id, ticker) {
+  injectTV(document.getElementById(id),
+    'https://s3.tradingview.com/external-embedding/embed-widget-symbol-overview.js', {
+      symbols: [[`IDX:${ticker}|3M`]], chartOnly: false,
+      width: "100%", height: "100%", locale: "id", colorTheme: "dark",
+      autosize: true, showVolume: false, hideDateRanges: false,
+      isTransparent: true, changeMode: "price-and-percent", chartType: "area",
+      lineColor: "rgba(201, 169, 74, 1)",
+      topColor: "rgba(201, 169, 74, 0.3)",
+      bottomColor: "rgba(201, 169, 74, 0)",
+      lineWidth: 2,
+    });
+}
+
+// ==========================================================
+// RENDER
+// ==========================================================
+function renderWatchlistGrid() {
+  const grid = document.getElementById('stockGrid');
+  document.getElementById('stockCount').textContent = `${watchlist.length} saham`;
+  if (watchlist.length === 0) {
+    grid.innerHTML = '<div class="empty-state">Watchlist kosong. Tambah saham di atas.</div>';
+    return;
+  }
+  grid.innerHTML = watchlist.map(ticker => `
+    <div class="stock-card" data-ticker="${ticker}">
+      <button class="remove-btn" data-remove="${ticker}">×</button>
+      <div class="stock-card-placeholder">
+        <div class="ph-ticker">${ticker}</div>
+        <div class="ph-loading">Memuat...</div>
+      </div>
+      <div class="stock-card-widget" id="widget-${ticker}"></div>
+    </div>
+  `).join('');
+
+  watchlist.forEach((ticker, i) => {
+    setTimeout(() => loadStockWidget(`widget-${ticker}`, ticker), i * 150);
   });
 
-  // Init
+  grid.querySelectorAll('.stock-card').forEach(card => {
+    card.addEventListener('click', e => {
+      if (e.target.closest('.remove-btn')) return;
+      openModal(card.dataset.ticker);
+    });
+  });
+  grid.querySelectorAll('[data-remove]').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      if (confirm(`Hapus ${btn.dataset.remove}?`)) removeStock(btn.dataset.remove);
+    });
+  });
+}
+
+function renderAlerts() {
+  const table = document.getElementById('alertsTable');
+  document.getElementById('alertCount').textContent = `${alerts.length} aktif`;
+  if (alerts.length === 0) {
+    table.innerHTML = '<div class="empty-state">Tidak ada alert aktif. Set di atas.</div>';
+    return;
+  }
+  table.innerHTML = `
+    <div class="alert-row alert-head">
+      <div>#</div><div>Ticker</div><div>Kondisi</div><div>Harga Target</div><div></div>
+    </div>` + alerts.map(a => `
+    <div class="alert-row">
+      <div class="alert-id">#${a.id}</div>
+      <div class="alert-ticker">${a.ticker}</div>
+      <div>${a.operator}</div>
+      <div>Rp ${a.price.toLocaleString('id-ID')}</div>
+      <button class="alert-delete" data-alert-id="${a.id}">×</button>
+    </div>
+  `).join('');
+  table.querySelectorAll('[data-alert-id]').forEach(btn => {
+    btn.addEventListener('click', () => deleteAlert(parseInt(btn.dataset.alertId)));
+  });
+}
+
+function openModal(ticker) {
+  document.getElementById('modalTitle').textContent = ticker;
+  document.getElementById('modalOverlay').classList.add('active');
+  document.body.style.overflow = 'hidden';
+  requestAnimationFrame(() => {
+    injectTV(document.getElementById('tv-modal-chart'),
+      'https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js', {
+        autosize: true, symbol: `IDX:${ticker}`, interval: "D",
+        timezone: "Asia/Jakarta", theme: "dark", style: "1", locale: "id",
+        backgroundColor: "#17171c", withdateranges: true,
+        studies: ["STD;SMA", "STD;RSI"],
+      });
+  });
+}
+
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('active');
+  document.body.style.overflow = '';
+  document.getElementById('tv-modal-chart').innerHTML = '';
+}
+
+// ==========================================================
+// EVENT LISTENERS
+// ==========================================================
+document.getElementById('addBtn').addEventListener('click', () => {
+  const input = document.getElementById('addTicker');
+  addStockToWatchlist(input.value);
+  input.value = '';
+});
+document.getElementById('addTicker').addEventListener('keydown', e => {
+  if (e.key === 'Enter') document.getElementById('addBtn').click();
+});
+
+document.getElementById('alertAddBtn').addEventListener('click', () => {
+  const ticker = document.getElementById('alertTicker').value.trim().toUpperCase();
+  const op = document.getElementById('alertOp').value;
+  const price = parseFloat(document.getElementById('alertPrice').value);
+  if (!ticker || !price) { alert('Lengkapi ticker & harga'); return; }
+  addAlert(ticker, op, price);
+  document.getElementById('alertTicker').value = '';
+  document.getElementById('alertPrice').value = '';
+});
+
+document.getElementById('modalClose').addEventListener('click', closeModal);
+document.getElementById('modalOverlay').addEventListener('click', e => {
+  if (e.target === document.getElementById('modalOverlay')) closeModal();
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && document.getElementById('modalOverlay').classList.contains('active')) closeModal();
+});
+
+// ==========================================================
+// MAIN
+// ==========================================================
+async function init() {
   loadIhsgChart();
-  renderGrid();
+  await loadWatchlist();
+  await loadAlerts();
+  renderWatchlistGrid();
+  renderAlerts();
+}
+init();
+
+// Auto-refresh every 2 minutes
+setInterval(async () => {
+  await loadWatchlist();
+  await loadAlerts();
+  renderWatchlistGrid();
+  renderAlerts();
+}, 2 * 60 * 1000);
 </script>
 </body>
 </html>
