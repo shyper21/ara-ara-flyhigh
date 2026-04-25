@@ -3,8 +3,18 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Market Terminal — Saham Indonesia</title>
+
+<!-- PWA Tags -->
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#c9a94a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Market">
+<link rel="apple-touch-icon" href="/icon-192.png">
+<link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,700;1,9..144,400&family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
@@ -135,8 +145,8 @@
     </header>
 
     <nav>
-      <a href="https://ara-ara-flyhigh.vercel.app/">Logam · Forex · Crypto</a>
-      <a href="/saham" class="active">Saham Indonesia</a>
+      <a href="index.html">Logam · Forex · Crypto</a>
+      <a href="saham.html" class="active">Saham Indonesia</a>
     </nav>
 
     <div class="sync-banner" id="syncBanner">🔄 Loading...</div>
@@ -550,6 +560,16 @@ setInterval(async () => {
   renderWatchlistGrid();
   renderAlerts();
 }, 2 * 60 * 1000);
+
+// ==========================================================
+// SERVICE WORKER REGISTRATION (PWA)
+// ==========================================================
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/service-worker.js')
+      .catch(err => console.warn('[PWA] SW failed:', err));
+  });
+}
 </script>
 </body>
 </html>
