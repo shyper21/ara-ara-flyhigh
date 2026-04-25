@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Market Terminal — Logam, Forex & Crypto</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,700;1,9..144,400&family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0b0b0d; --bg-elev: #121216; --bg-card: #17171c;
+    --border: #26262d; --border-light: #33333c;
+    --text: #e8e4d9; --text-dim: #8b8678; --text-muted: #5a5650;
+    --gold: #c9a94a; --gold-bright: #e6c76a;
+    --up: #7dc88c; --down: #e27d7d; --warn: #d4a54a;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg); color: var(--text);
+    font-family: 'JetBrains Mono', monospace;
+    min-height: 100vh;
+    background-image:
+      radial-gradient(circle at 20% 0%, rgba(201, 169, 74, 0.06), transparent 50%),
+      radial-gradient(circle at 80% 100%, rgba(201, 169, 74, 0.04), transparent 50%);
+    background-attachment: fixed;
+    padding: 24px;
+  }
+  .container { max-width: 1400px; margin: 0 auto; }
+
+  header {
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 24px; margin-bottom: 32px;
+    display: flex; justify-content: space-between; align-items: flex-end;
+    flex-wrap: wrap; gap: 20px;
+  }
+  .brand h1 {
+    font-family: 'Fraunces', serif; font-weight: 300;
+    font-size: clamp(28px, 4vw, 44px); letter-spacing: -0.02em;
+    line-height: 1; font-style: italic;
+  }
+  .brand h1 span { color: var(--gold); font-style: normal; font-weight: 500; }
+  .brand .subtitle {
+    font-size: 11px; text-transform: uppercase; letter-spacing: 0.25em;
+    color: var(--text-muted); margin-top: 12px;
+  }
+  .status {
+    display: flex; flex-direction: column; align-items: flex-end; gap: 8px;
+    font-size: 11px; text-transform: uppercase; letter-spacing: 0.15em;
+  }
+  .status-row { display: flex; align-items: center; gap: 10px; color: var(--text-dim); }
+  .pulse {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--up); animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(125, 200, 140, 0.4); }
+    50% { opacity: 0.6; box-shadow: 0 0 0 8px rgba(125, 200, 140, 0); }
+  }
+  .btn-minimal {
+    background: transparent; border: 1px solid var(--border-light);
+    color: var(--text-dim); padding: 6px 14px;
+    font-family: inherit; font-size: 10px;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    cursor: pointer; transition: all 0.2s;
+    text-decoration: none; display: inline-block;
+  }
+  .btn-minimal:hover { border-color: var(--gold); color: var(--gold); }
+  .btn-minimal:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  nav {
+    display: flex; gap: 0; margin-bottom: 24px;
+    border-bottom: 1px solid var(--border);
+  }
+  nav a {
+    padding: 14px 24px; color: var(--text-muted); text-decoration: none;
+    font-size: 11px; letter-spacing: 0.25em; text-transform: uppercase;
+    border-bottom: 2px solid transparent; transition: all 0.2s;
+    margin-bottom: -1px;
+  }
+  nav a:hover { color: var(--text); }
+  nav a.active { color: var(--gold); border-bottom-color: var(--gold); }
+
+  /* Weekend warning */
+  .weekend-warn {
+    background: rgba(212, 165, 74, 0.08);
+    border: 1px solid var(--warn);
+    color: var(--warn);
+    padding: 12px 20px; margin-bottom: 32px;
+    font-size: 11px; letter-spacing: 0.1em;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .weekend-warn b { font-weight: 700; }
+
+  .section { margin-bottom: 48px; }
+  .section-title {
+    font-family: 'Fraunces', serif; font-size: 13px; font-weight: 500;
+    text-transform: uppercase; letter-spacing: 0.3em;
+    color: var(--gold); margin-bottom: 20px;
+    padding-bottom: 12px; border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 12px;
+  }
+  .section-title::before {
+    content: ''; width: 6px; height: 6px;
+    background: var(--gold); transform: rotate(45deg);
+  }
+  .section-title .count {
+    margin-left: auto; color: var(--text-muted);
+    font-size: 10px; letter-spacing: 0.2em;
+  }
+
+  .estimate-badge {
+    display: inline-block; padding: 3px 8px;
+    background: rgba(212, 165, 74, 0.15);
+    border: 1px solid var(--warn); color: var(--warn);
+    font-size: 9px; letter-spacing: 0.2em;
+    text-transform: uppercase; font-weight: 700;
+  }
+
+  .antam-card {
+    background: linear-gradient(135deg, var(--bg-card), var(--bg-elev));
+    border: 1px solid var(--gold);
+    padding: 28px 32px; margin-bottom: 16px;
+    position: relative; overflow: hidden;
+  }
+  .antam-card::before {
+    content: ''; position: absolute; top: 0; right: 0;
+    width: 200px; height: 200px;
+    background: radial-gradient(circle, rgba(201, 169, 74, 0.1), transparent 70%);
+  }
+  .antam-head {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 18px; position: relative; z-index: 1;
+    flex-wrap: wrap; gap: 12px;
+  }
+  .antam-head h3 {
+    font-family: 'Fraunces', serif; font-size: 18px;
+    font-weight: 500; color: var(--text);
+  }
+  .antam-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 24px; position: relative; z-index: 1;
+  }
+  .antam-item .label {
+    font-size: 10px; text-transform: uppercase; letter-spacing: 0.2em;
+    color: var(--text-dim); margin-bottom: 6px;
+  }
+  .antam-item .value {
+    font-family: 'Fraunces', serif; font-size: 26px; font-weight: 500;
+    color: var(--gold); letter-spacing: -0.01em;
+  }
+  .antam-item .sub {
+    font-size: 10px; color: var(--text-muted); letter-spacing: 0.1em; margin-top: 4px;
+  }
+
+  .antam-settings {
+    margin-top: 20px; padding-top: 16px;
+    border-top: 1px dashed var(--border);
+    position: relative; z-index: 1;
+    display: flex; align-items: center; flex-wrap: wrap; gap: 12px;
+  }
+  .antam-settings label {
+    font-size: 10px; color: var(--text-dim);
+    letter-spacing: 0.15em; text-transform: uppercase;
+  }
+  .antam-settings input {
+    background: var(--bg); border: 1px solid var(--border-light);
+    color: var(--text); padding: 6px 10px;
+    font-family: inherit; font-size: 12px; width: 80px;
+    text-align: center;
+  }
+  .antam-settings input:focus { outline: none; border-color: var(--gold); }
+
+  .antam-note {
+    font-size: 11px; color: var(--text-dim);
+    margin-top: 14px; line-height: 1.6;
+    position: relative; z-index: 1;
+  }
+  .antam-note a {
+    color: var(--gold); text-decoration: none;
+    border-bottom: 1px dashed var(--gold);
+  }
+  .antam-note a:hover { color: var(--gold-bright); }
+
+  .grid-metals {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1px; background: var(--border); border: 1px solid var(--border);
+  }
+  .metal-card { background: var(--bg-card); padding: 22px; transition: background 0.3s; }
+  .metal-card:hover { background: var(--bg-elev); }
+  .metal-head {
+    display: flex; justify-content: space-between; align-items: baseline;
+    margin-bottom: 14px;
+  }
+  .metal-name { font-family: 'Fraunces', serif; font-size: 20px; font-weight: 400; }
+  .metal-symbol { font-size: 10px; letter-spacing: 0.3em; color: var(--text-muted); }
+  .price-main {
+    font-size: 24px; font-weight: 500; color: var(--text);
+    margin-bottom: 4px; letter-spacing: -0.01em;
+  }
+  .price-main.error-state { color: var(--down); font-size: 14px; }
+  .price-unit {
+    font-size: 10px; color: var(--text-muted); letter-spacing: 0.15em;
+    text-transform: uppercase; margin-bottom: 14px;
+  }
+  .price-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 7px 0; border-top: 1px dashed var(--border); font-size: 12px;
+  }
+  .price-label { color: var(--text-dim); }
+  .price-value { color: var(--text); font-weight: 500; }
+  .gold-accent { color: var(--gold); }
+
+  .fx-table, .crypto-table {
+    background: var(--bg-card); border: 1px solid var(--border); overflow: hidden;
+  }
+  .fx-row, .crypto-row {
+    align-items: center; padding: 14px 20px;
+    border-bottom: 1px solid var(--border); font-size: 13px;
+    transition: background 0.2s;
+  }
+  .fx-row:hover, .crypto-row:hover { background: var(--bg-elev); }
+  .fx-row:last-child, .crypto-row:last-child { border-bottom: none; }
+  .fx-head, .crypto-head {
+    background: var(--bg-elev); color: var(--text-muted);
+    font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+    padding: 10px 20px; border-bottom: 1px solid var(--border-light);
+  }
+  .fx-head, .fx-row { grid-template-columns: 90px 1fr 1fr 1fr; gap: 16px; display: grid; }
+  .fx-pair { font-weight: 500; color: var(--gold); letter-spacing: 0.08em; }
+  .fx-name { color: var(--text-dim); }
+  .fx-rate { text-align: right; font-weight: 500; }
+  .fx-inverse { text-align: right; color: var(--text-dim); font-size: 11px; }
+
+  .crypto-head, .crypto-row { grid-template-columns: 120px 1fr 1fr 100px; gap: 16px; display: grid; }
+  .crypto-name-block { display: flex; flex-direction: column; gap: 2px; }
+  .crypto-name {
+    font-family: 'Fraunces', serif; font-size: 17px; font-weight: 500;
+    color: var(--gold); line-height: 1.1;
+  }
+  .crypto-sym { font-size: 10px; color: var(--text-muted); letter-spacing: 0.2em; }
+  .crypto-price { text-align: right; font-weight: 500; }
+  .crypto-change { text-align: right; font-weight: 500; font-size: 12px; }
+  .crypto-change.up { color: var(--up); }
+  .crypto-change.down { color: var(--down); }
+
+  /* TradingView chart container */
+  .tv-wrapper {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    padding: 2px;
+    height: 500px;
+    position: relative;
+  }
+  .tv-wrapper > div { height: 100%; }
+
+  .loading { color: var(--text-muted); font-size: 11px; letter-spacing: 0.2em; }
+  .loading::after { content: '...'; animation: dots 1.5s infinite; }
+  @keyframes dots {
+    0%, 20% { content: '.'; }
+    40% { content: '..'; }
+    60%, 100% { content: '...'; }
+  }
+  .error {
+    color: var(--down); font-size: 11px; padding: 12px 20px;
+    background: rgba(226, 125, 125, 0.08);
+  }
+
+  footer {
+    margin-top: 60px; padding-top: 24px; border-top: 1px solid var(--border);
+    text-align: center; font-size: 10px; color: var(--text-muted);
+    letter-spacing: 0.2em; text-transform: uppercase;
+  }
+  footer a { color: var(--text-dim); text-decoration: none; }
+  footer a:hover { color: var(--gold); }
+
+  @media (max-width: 640px) {
+    body { padding: 16px; }
+    nav a { padding: 12px 16px; font-size: 10px; letter-spacing: 0.15em; }
+    .fx-row, .fx-head { grid-template-columns: 70px 1fr 90px; gap: 10px; font-size: 12px; }
+    .fx-inverse { display: none; }
+    .crypto-row, .crypto-head { grid-template-columns: 100px 1fr 90px; gap: 10px; }
+    .crypto-row > :nth-child(3), .crypto-head > :nth-child(3) { display: none; }
+    .antam-item .value { font-size: 20px; }
+    .tv-wrapper { height: 400px; }
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+
+    <header>
+      <div class="brand">
+        <h1><span>Market</span> Terminal</h1>
+        <div class="subtitle">Logam · Forex · Crypto — Real-time</div>
+      </div>
+      <div class="status">
+        <div class="status-row">
+          <span class="pulse"></span>
+          <span id="lastUpdate">Memuat data...</span>
+        </div>
+        <div class="status-row">
+          <span>Refresh:</span>
+          <span id="countdown" style="color: var(--gold);">—</span>
+          <button class="btn-minimal" id="refreshBtn">⟳ Refresh</button>
+        </div>
+      </div>
+    </header>
+
+    <nav>
+      <a href="index.html" class="active">Logam · Forex · Crypto</a>
+      <a href="saham.html">Saham Indonesia</a>
+    </nav>
+
+    <div class="weekend-warn" id="weekendWarn" style="display:none;">
+      <span>⚠️</span>
+      <div>
+        <b>Market Emas Dunia Tutup (Weekend)</b> —
+        Pasar emas LBMA tutup Sabtu-Minggu. Harga yang ditampilkan adalah penutupan Jumat terakhir.
+        Antam juga tidak update harga di weekend. Data akan fresh lagi Senin pagi.
+      </div>
+    </div>
+
+    <section class="section">
+      <h2 class="section-title">
+        Emas Antam (Estimasi)
+        <span class="count">Dari Spot Gold + Premium</span>
+      </h2>
+      <div class="antam-card">
+        <div class="antam-head">
+          <h3>Perkiraan Harga Antam Hari Ini</h3>
+          <span class="estimate-badge">● Estimasi</span>
+        </div>
+        <div class="antam-grid">
+          <div class="antam-item">
+            <div class="label">Harga Jual / Gram</div>
+            <div class="value" id="antamSell">—</div>
+            <div class="sub">Spot + premium jual</div>
+          </div>
+          <div class="antam-item">
+            <div class="label">Harga Buyback / Gram</div>
+            <div class="value" id="antamBuy">—</div>
+            <div class="sub">Spot + premium buyback</div>
+          </div>
+          <div class="antam-item">
+            <div class="label">Spot Gold / Gram (IDR)</div>
+            <div class="value" id="antamSpot" style="color: var(--text);">—</div>
+            <div class="sub">Basis perhitungan</div>
+          </div>
+          <div class="antam-item">
+            <div class="label">Estimasi Spread</div>
+            <div class="value" id="antamSpread" style="color: var(--text);">—</div>
+            <div class="sub">Jual − buyback</div>
+          </div>
+        </div>
+
+        <div class="antam-settings">
+          <label>Premium Jual (%)</label>
+          <input type="number" id="premiumSell" step="0.5" min="0" max="30">
+          <label>Premium Buyback (%)</label>
+          <input type="number" id="premiumBuy" step="0.5" min="-10" max="10">
+          <button class="btn-minimal" id="saveSettings">💾 Simpan</button>
+          <button class="btn-minimal" id="resetSettings">↺ Default</button>
+        </div>
+
+        <div class="antam-note">
+          💡 <b>Cara tuning:</b> Buka <a href="https://www.logammulia.com/id/harga-emas-hari-ini" target="_blank">logammulia.com</a>,
+          catat harga Jual & Buyback hari ini, lalu sesuaikan premium di atas.<br>
+          Formula: <b>Premium Jual %</b> = ((Harga_Jual_Antam / Spot_Gold_IDR) − 1) × 100.
+          Default: Jual +8.5%, Buyback +1.5% (sesuai kondisi April 2026).
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">
+        Logam Mulia Dunia
+        <span class="count">Spot Price Internasional</span>
+      </h2>
+      <div class="grid-metals" id="metalsGrid">
+        <div class="metal-card" data-metal="XAU">
+          <div class="metal-head"><div class="metal-name">Emas</div><div class="metal-symbol">XAU</div></div>
+          <div class="price-main loading">Loading</div>
+          <div class="price-unit">USD per troy ounce</div>
+          <div class="price-row"><span class="price-label">Per Gram (USD)</span><span class="price-value" data-field="usdGram">—</span></div>
+          <div class="price-row"><span class="price-label">Per Gram (IDR)</span><span class="price-value gold-accent" data-field="idrGram">—</span></div>
+        </div>
+        <div class="metal-card" data-metal="XAG">
+          <div class="metal-head"><div class="metal-name">Perak</div><div class="metal-symbol">XAG</div></div>
+          <div class="price-main loading">Loading</div>
+          <div class="price-unit">USD per troy ounce</div>
+          <div class="price-row"><span class="price-label">Per Gram (USD)</span><span class="price-value" data-field="usdGram">—</span></div>
+          <div class="price-row"><span class="price-label">Per Gram (IDR)</span><span class="price-value gold-accent" data-field="idrGram">—</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">
+        Kurs Mata Uang → IDR
+        <span class="count">Live Exchange Rates</span>
+      </h2>
+      <div class="fx-table">
+        <div class="fx-head">
+          <div>Pair</div>
+          <div>Nama</div>
+          <div style="text-align:right">1 Unit → IDR</div>
+          <div style="text-align:right">1 IDR → Unit</div>
+        </div>
+        <div id="fxRows">
+          <div class="fx-row"><span class="loading">Loading</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">
+        Cryptocurrency
+        <span class="count">Top Assets</span>
+      </h2>
+      <div class="crypto-table">
+        <div class="crypto-head">
+          <div>Nama</div>
+          <div style="text-align:right">USD</div>
+          <div style="text-align:right">IDR</div>
+          <div style="text-align:right">24j</div>
+        </div>
+        <div id="cryptoRows">
+          <div class="crypto-row"><span class="loading">Loading</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">
+        Bitcoin Chart — Live
+        <span class="count">BTC/USDT · Powered by TradingView</span>
+      </h2>
+      <div class="tv-wrapper">
+        <div class="tradingview-widget-container" style="height:100%;width:100%">
+          <div id="tv-btc-chart" style="height:100%;width:100%"></div>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      Data: <a href="https://gold-api.com" target="_blank">gold-api.com</a> ·
+      <a href="https://open.er-api.com" target="_blank">er-api</a> ·
+      <a href="https://www.coingecko.com" target="_blank">CoinGecko</a> ·
+      <a href="https://www.tradingview.com" target="_blank">TradingView</a>
+      &nbsp;·&nbsp; Refresh 5 menit
+    </footer>
+
+  </div>
+
+<script>
+  const REFRESH_INTERVAL = 5 * 60 * 1000;
+  const GRAMS_PER_OZ = 31.1034768;
+
+  // Default premium
+  const DEFAULT_PREMIUM_SELL = 8.5;   // 8.5%
+  const DEFAULT_PREMIUM_BUY  = 1.5;   // 1.5% (di atas spot, karena Antam buyback ternyata lebih mendekati spot)
+
+  const METALS = ['XAU', 'XAG'];
+
+  const FX_PAIRS = [
+    { code: 'USD', name: 'Dollar Amerika' },
+    { code: 'SGD', name: 'Dollar Singapura' },
+    { code: 'THB', name: 'Baht Thailand' },
+    { code: 'EUR', name: 'Euro' },
+    { code: 'JPY', name: 'Yen Jepang' },
+    { code: 'GBP', name: 'Pound Sterling' },
+    { code: 'MYR', name: 'Ringgit Malaysia' },
+    { code: 'CNY', name: 'Yuan Tiongkok' },
+    { code: 'AUD', name: 'Dollar Australia' },
+    { code: 'KRW', name: 'Won Korea' },
+    { code: 'HKD', name: 'Dollar Hong Kong' },
+    { code: 'SAR', name: 'Riyal Saudi' },
+  ];
+
+  const CRYPTOS = [
+    { id: 'bitcoin',     name: 'Bitcoin',     sym: 'BTC' },
+    { id: 'ethereum',    name: 'Ethereum',    sym: 'ETH' },
+    { id: 'solana',      name: 'Solana',      sym: 'SOL' },
+    { id: 'ripple',      name: 'XRP',         sym: 'XRP' },
+    { id: 'hyperliquid', name: 'Hyperliquid', sym: 'HYPE' },
+    { id: 'tether',      name: 'Tether',      sym: 'USDT' },
+  ];
+
+  const fmtUSD = n => n == null ? '—' : '$' + n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  const fmtUSDsmall = n => n == null ? '—' : '$' + n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 4 });
+  const fmtIDR = n => n == null ? '—' : 'Rp ' + Math.round(n).toLocaleString('id-ID');
+  const fmtPct = n => n == null ? '—' : (n >= 0 ? '+' : '') + n.toFixed(2) + '%';
+
+  async function fetchJson(url) {
+    const r = await fetch(url);
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    return r.json();
+  }
+
+  async function fetchMetals() {
+    const results = await Promise.allSettled(
+      METALS.map(m => fetchJson(`https://api.gold-api.com/price/${m}`))
+    );
+    const map = {};
+    METALS.forEach((m, i) => {
+      map[m] = results[i].status === 'fulfilled' ? results[i].value.price : null;
+    });
+    return map;
+  }
+
+  async function fetchForex() {
+    const data = await fetchJson('https://open.er-api.com/v6/latest/USD');
+    return data.rates;
+  }
+
+  async function fetchCrypto() {
+    const ids = CRYPTOS.map(c => c.id).join(',');
+    const url = `https://api.coingecko.com/api/v3/simple/price?ids=${ids}&vs_currencies=usd,idr&include_24hr_change=true`;
+    return fetchJson(url);
+  }
+
+  function getPremiumSettings() {
+    const sell = parseFloat(localStorage.getItem('antam_premium_sell')) || DEFAULT_PREMIUM_SELL;
+    const buy  = parseFloat(localStorage.getItem('antam_premium_buy'))  || DEFAULT_PREMIUM_BUY;
+    return { sell, buy };
+  }
+
+  function renderAntam(xauUsd, usdToIdr) {
+    if (xauUsd == null || usdToIdr == null) {
+      ['antamSell','antamBuy','antamSpot','antamSpread'].forEach(id => {
+        document.getElementById(id).textContent = 'N/A';
+      });
+      return;
+    }
+    const { sell: premSell, buy: premBuy } = getPremiumSettings();
+    const spotPerGramIdr = (xauUsd / GRAMS_PER_OZ) * usdToIdr;
+    const sell = spotPerGramIdr * (1 + premSell / 100);
+    const buy  = spotPerGramIdr * (1 + premBuy / 100);
+    const spread = sell - buy;
+
+    document.getElementById('antamSell').textContent = fmtIDR(sell);
+    document.getElementById('antamBuy').textContent = fmtIDR(buy);
+    document.getElementById('antamSpot').textContent = fmtIDR(spotPerGramIdr);
+    document.getElementById('antamSpread').textContent = fmtIDR(spread);
+  }
+
+  function renderMetals(metals, usdToIdr) {
+    document.querySelectorAll('.metal-card').forEach(card => {
+      const sym = card.dataset.metal;
+      const priceUsd = metals[sym];
+      const priceEl = card.querySelector('.price-main');
+      if (priceUsd == null) {
+        priceEl.textContent = 'Data tidak tersedia';
+        priceEl.classList.remove('loading');
+        priceEl.classList.add('error-state');
+        card.querySelector('[data-field="usdGram"]').textContent = 'N/A';
+        card.querySelector('[data-field="idrGram"]').textContent = 'N/A';
+        return;
+      }
+      const usdGram = priceUsd / GRAMS_PER_OZ;
+      const idrGram = usdToIdr ? usdGram * usdToIdr : null;
+      priceEl.textContent = fmtUSD(priceUsd);
+      priceEl.classList.remove('loading', 'error-state');
+      card.querySelector('[data-field="usdGram"]').textContent = fmtUSDsmall(usdGram);
+      card.querySelector('[data-field="idrGram"]').textContent = fmtIDR(idrGram);
+    });
+  }
+
+  function renderForex(rates) {
+    const container = document.getElementById('fxRows');
+    if (!rates || !rates.IDR) {
+      container.innerHTML = '<div class="error">Gagal memuat data forex</div>';
+      return;
+    }
+    const idrPerUsd = rates.IDR;
+    container.innerHTML = FX_PAIRS.map(p => {
+      const rateFromUsd = rates[p.code];
+      if (rateFromUsd == null) return '';
+      const unitToIdr = idrPerUsd / rateFromUsd;
+      const idrToUnit = 1 / unitToIdr;
+      return `
+        <div class="fx-row">
+          <div class="fx-pair">${p.code}/IDR</div>
+          <div class="fx-name">${p.name}</div>
+          <div class="fx-rate gold-accent">Rp ${unitToIdr.toLocaleString('id-ID', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
+          <div class="fx-inverse">${idrToUnit.toLocaleString('en-US', { minimumFractionDigits: 6, maximumFractionDigits: 8 })}</div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  function renderCrypto(data) {
+    const container = document.getElementById('cryptoRows');
+    if (!data) {
+      container.innerHTML = '<div class="error">Gagal memuat data crypto</div>';
+      return;
+    }
+    container.innerHTML = CRYPTOS.map(c => {
+      const d = data[c.id];
+      if (!d) return `
+        <div class="crypto-row">
+          <div class="crypto-name-block">
+            <span class="crypto-name">${c.name}</span>
+            <span class="crypto-sym">${c.sym}</span>
+          </div>
+          <div class="crypto-price" style="color:var(--text-muted)">N/A</div>
+          <div class="crypto-price" style="color:var(--text-muted)">N/A</div>
+          <div></div>
+        </div>`;
+      const change = d.usd_24h_change;
+      const changeClass = change >= 0 ? 'up' : 'down';
+      const usdDecimals = d.usd < 1 ? 4 : 2;
+      return `
+        <div class="crypto-row">
+          <div class="crypto-name-block">
+            <span class="crypto-name">${c.name}</span>
+            <span class="crypto-sym">${c.sym}</span>
+          </div>
+          <div class="crypto-price">$${d.usd.toLocaleString('en-US', { minimumFractionDigits: usdDecimals, maximumFractionDigits: usdDecimals })}</div>
+          <div class="crypto-price">${fmtIDR(d.idr)}</div>
+          <div class="crypto-change ${changeClass}">${fmtPct(change)}</div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  function showWeekendWarning() {
+    const day = new Date().getDay(); // 0 = Sunday, 6 = Saturday
+    if (day === 0 || day === 6) {
+      document.getElementById('weekendWarn').style.display = 'flex';
+    }
+  }
+
+  function loadBtcChart() {
+    // TradingView Advanced Chart widget untuk Bitcoin
+    const script = document.createElement('script');
+    script.src = 'https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js';
+    script.async = true;
+    script.innerHTML = JSON.stringify({
+      "autosize": true,
+      "symbol": "BINANCE:BTCUSDT",
+      "interval": "D",
+      "timezone": "Asia/Jakarta",
+      "theme": "dark",
+      "style": "1",
+      "locale": "id",
+      "toolbar_bg": "#17171c",
+      "enable_publishing": false,
+      "allow_symbol_change": true,
+      "hide_side_toolbar": false,
+      "backgroundColor": "#17171c",
+      "gridColor": "rgba(38, 38, 45, 0.5)",
+      "withdateranges": true,
+      "details": false,
+      "hotlist": false,
+      "calendar": false,
+      "studies": [],
+      "show_popup_button": true,
+      "popup_width": "1000",
+      "popup_height": "650"
+    });
+    document.getElementById('tv-btc-chart').appendChild(script);
+  }
+
+  function loadSettings() {
+    const { sell, buy } = getPremiumSettings();
+    document.getElementById('premiumSell').value = sell;
+    document.getElementById('premiumBuy').value = buy;
+  }
+
+  document.getElementById('saveSettings').addEventListener('click', () => {
+    const sell = parseFloat(document.getElementById('premiumSell').value);
+    const buy  = parseFloat(document.getElementById('premiumBuy').value);
+    if (isNaN(sell) || isNaN(buy)) {
+      alert('Premium harus berupa angka'); return;
+    }
+    localStorage.setItem('antam_premium_sell', sell);
+    localStorage.setItem('antam_premium_buy', buy);
+    loadAll();
+  });
+
+  document.getElementById('resetSettings').addEventListener('click', () => {
+    if (!confirm('Reset premium ke default (Jual 8.5%, Buyback 1.5%)?')) return;
+    localStorage.removeItem('antam_premium_sell');
+    localStorage.removeItem('antam_premium_buy');
+    loadSettings();
+    loadAll();
+  });
+
+  let countdownTimer = null;
+  let countdownValue = 0;
+
+  async function loadAll() {
+    document.getElementById('lastUpdate').textContent = 'Memperbarui...';
+    document.getElementById('refreshBtn').disabled = true;
+
+    const [metalsRes, fxRes, cryptoRes] = await Promise.allSettled([
+      fetchMetals(), fetchForex(), fetchCrypto(),
+    ]);
+
+    const metals = metalsRes.status === 'fulfilled' ? metalsRes.value : {};
+    const rates  = fxRes.status === 'fulfilled' ? fxRes.value : null;
+    const crypto = cryptoRes.status === 'fulfilled' ? cryptoRes.value : null;
+    const usdToIdr = rates ? rates.IDR : null;
+
+    renderAntam(metals.XAU, usdToIdr);
+    renderMetals(metals, usdToIdr);
+    renderForex(rates);
+    renderCrypto(crypto);
+
+    const now = new Date();
+    document.getElementById('lastUpdate').textContent = 'Diperbarui ' + now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    document.getElementById('refreshBtn').disabled = false;
+
+    startCountdown();
+  }
+
+  function startCountdown() {
+    if (countdownTimer) clearInterval(countdownTimer);
+    countdownValue = REFRESH_INTERVAL / 1000;
+    updateCountdown();
+    countdownTimer = setInterval(() => {
+      countdownValue--;
+      updateCountdown();
+      if (countdownValue <= 0) {
+        clearInterval(countdownTimer);
+        loadAll();
+      }
+    }, 1000);
+  }
+
+  function updateCountdown() {
+    const m = Math.floor(countdownValue / 60);
+    const s = countdownValue % 60;
+    document.getElementById('countdown').textContent = `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+  }
+
+  document.getElementById('refreshBtn').addEventListener('click', loadAll);
+
+  // Init
+  showWeekendWarning();
+  loadSettings();
+  loadBtcChart();
+  loadAll();
+</script>
+</body>
+</html>
