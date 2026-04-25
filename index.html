@@ -251,25 +251,15 @@
           <span id="syncStatus">Menghubungkan bot...</span>
         </div>
         <div class="status-row">
-          <button class="btn-minimal" id="configBtn">⚙️ Config</button>
           <button class="btn-minimal" id="refreshBtn">⟳ Refresh</button>
         </div>
       </div>
     </header>
 
     <nav>
-      <a href="#" class="active">Logam · Forex · Crypto</a>
-      <a href="/saham">Saham Indonesia</a>
+      <a href="index.html" class="active">Logam · Forex · Crypto</a>
+      <a href="saham.html">Saham Indonesia</a>
     </nav>
-
-    <!-- Config banner - muncul kalau belum di-setup -->
-    <div class="config-banner" id="configBanner">
-      <span>🔧 <b>Setup Bot Connection:</b></span>
-      <input type="text" id="cfgBotUrl" placeholder="Bot URL (https://xxx.up.railway.app)">
-      <input type="text" id="cfgApiKey" placeholder="API Secret Key" autocomplete="off">
-      <button class="btn-primary" id="cfgSaveBtn">Simpan</button>
-      <button class="btn-minimal" id="cfgCloseBtn">Skip</button>
-    </div>
 
     <!-- Sync status -->
     <div class="sync-banner" id="syncBanner">
@@ -383,18 +373,13 @@
 
 <script>
 // ==========================================================
-// CONFIGURATION
+// CONFIGURATION — VERCEL PROXY MODE
+// ==========================================================
+// URL & API Key DISEMBUNYIKAN di Vercel env vars (server-side).
+// Dashboard hanya fetch ke /api/* relative URL, tidak perlu config.
 // ==========================================================
 const REFRESH_INTERVAL = 5 * 60 * 1000;
 const GRAMS_PER_OZ = 31.1034768;
-
-// LocalStorage keys
-const LS_BOT_URL = 'bot_api_url';
-const LS_API_KEY = 'bot_api_key';
-
-// Ambil config dari localStorage
-let BOT_URL = localStorage.getItem(LS_BOT_URL) || '';
-let API_KEY = localStorage.getItem(LS_API_KEY) || '';
 
 const FX_PAIRS = [
   { code: 'USD', name: 'Dollar Amerika' },
@@ -429,22 +414,25 @@ const fmtIDR = n => n == null ? '—' : 'Rp ' + Math.round(n).toLocaleString('id
 const fmtPct = n => n == null ? '—' : (n >= 0 ? '+' : '') + n.toFixed(2) + '%';
 
 // ==========================================================
-// BOT API CLIENT
+// BOT API CLIENT — via Vercel Proxy
+// ==========================================================
+// Request dikirim ke /api/* relative URL.
+// Vercel serverless function (api/[...path].js) akan forward
+// ke bot Railway dengan API Key tersembunyi.
 // ==========================================================
 async function botApi(endpoint, options = {}) {
-  if (!BOT_URL || !API_KEY) {
-    throw new Error('Bot not configured');
-  }
-  const url = `${BOT_URL.replace(/\/$/, '')}/api${endpoint}`;
-  const headers = { 'X-API-Key': API_KEY, 'Content-Type': 'application/json', ...options.headers };
+  // Relative URL — auto jalan di Vercel deployment
+  const url = `/api${endpoint}`;
   const res = await fetch(url, {
     ...options,
-    headers,
-    mode: 'cors',
+    headers: {
+      'Content-Type': 'application/json',
+      ...options.headers,
+    },
   });
   if (!res.ok) {
     const err = await res.json().catch(() => ({ error: res.statusText }));
-    throw new Error(err.error || `HTTP ${res.status}`);
+    throw new Error(err.error || err.message || `HTTP ${res.status}`);
   }
   return res.json();
 }
@@ -452,16 +440,10 @@ async function botApi(endpoint, options = {}) {
 let botOnline = false;
 
 async function checkBotConnection() {
-  if (!BOT_URL || !API_KEY) {
-    updateSyncStatus('warn', '⚠️ Bot belum dikonfigurasi — klik Config');
-    showConfigBanner();
-    return false;
-  }
   try {
     await botApi('/status');
     botOnline = true;
     updateSyncStatus('ok', '🟢 Bot connected & syncing');
-    hideConfigBanner();
     return true;
   } catch (e) {
     botOnline = false;
@@ -680,19 +662,6 @@ function loadBtcChart() {
 }
 
 // ==========================================================
-// CONFIG BANNER
-// ==========================================================
-function showConfigBanner() {
-  document.getElementById('configBanner').classList.remove('hidden');
-  document.getElementById('cfgBotUrl').value = BOT_URL;
-  document.getElementById('cfgApiKey').value = API_KEY;
-}
-
-function hideConfigBanner() {
-  document.getElementById('configBanner').classList.add('hidden');
-}
-
-// ==========================================================
 // MAIN LOOP
 // ==========================================================
 async function loadAll() {
@@ -716,16 +685,6 @@ async function loadAll() {
 
 // Event listeners
 document.getElementById('refreshBtn').addEventListener('click', loadAll);
-document.getElementById('configBtn').addEventListener('click', showConfigBanner);
-document.getElementById('cfgCloseBtn').addEventListener('click', hideConfigBanner);
-document.getElementById('cfgSaveBtn').addEventListener('click', () => {
-  BOT_URL = document.getElementById('cfgBotUrl').value.trim();
-  API_KEY = document.getElementById('cfgApiKey').value.trim();
-  localStorage.setItem(LS_BOT_URL, BOT_URL);
-  localStorage.setItem(LS_API_KEY, API_KEY);
-  hideConfigBanner();
-  loadAll();
-});
 document.getElementById('saveSettings').addEventListener('click', saveAntamPremium);
 
 // Init
