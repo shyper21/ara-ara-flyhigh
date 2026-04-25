@@ -3,8 +3,20 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Market Terminal — Logam, Forex & Crypto</title>
+
+<!-- PWA Tags -->
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#c9a94a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Market">
+<link rel="apple-touch-icon" href="/icon-192.png">
+<link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="/icon-512.png">
+<meta name="description" content="Dashboard pribadi: Saham IDX, Emas, Forex, Crypto">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,700;1,9..144,400&family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
@@ -257,8 +269,8 @@
     </header>
 
     <nav>
-      <a href="#" class="active">Logam · Forex · Crypto</a>
-      <a href="/saham">Saham Indonesia</a>
+      <a href="index.html" class="active">Logam · Forex · Crypto</a>
+      <a href="saham.html">Saham Indonesia</a>
     </nav>
 
     <!-- Sync status -->
@@ -692,6 +704,26 @@ showWeekendWarning();
 loadBtcChart();
 loadAll();
 setInterval(loadAll, REFRESH_INTERVAL);
+
+// ==========================================================
+// SERVICE WORKER REGISTRATION (PWA)
+// ==========================================================
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/service-worker.js')
+      .then(reg => console.log('[PWA] SW registered:', reg.scope))
+      .catch(err => console.warn('[PWA] SW registration failed:', err));
+  });
+}
+
+// Install prompt for Add to Home Screen
+let deferredInstallPrompt = null;
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredInstallPrompt = e;
+  // Bisa tampilkan tombol install custom di sini
+  console.log('[PWA] Install prompt ready');
+});
 </script>
 </body>
 </html>
