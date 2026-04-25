@@ -1,0 +1,40 @@
+{
+  "name": "Market Terminal",
+  "short_name": "Market",
+  "description": "Dashboard pribadi: Saham IDX, Emas, Forex, Crypto",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#0b0b0d",
+  "theme_color": "#c9a94a",
+  "scope": "/",
+  "lang": "id",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Saham Indonesia",
+      "url": "/saham.html",
+      "description": "Watchlist saham IDX"
+    }
+  ],
+  "categories": ["finance", "business"]
+}
