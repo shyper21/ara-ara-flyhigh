@@ -135,7 +135,7 @@
     </header>
 
     <nav>
-      <a href="index.html">Logam · Forex · Crypto</a>
+      <a href="https://ara-ara-flyhigh.vercel.app/">Logam · Forex · Crypto</a>
       <a href="/saham" class="active">Saham Indonesia</a>
     </nav>
 
@@ -218,15 +218,14 @@
 
 <script>
 // ==========================================================
-// CONFIG (from localStorage, set in index.html)
+// CONFIG — VERCEL PROXY MODE
 // ==========================================================
-const LS_BOT_URL = 'bot_api_url';
-const LS_API_KEY = 'bot_api_key';
+// Tidak perlu hardcode URL/Key — semua via Vercel proxy.
+// BOT_URL dan API_KEY disimpan sebagai env var di Vercel.
+// ==========================================================
+
 const LS_WATCHLIST_CACHE = 'watchlist_cache';
 const LS_ALERTS_CACHE = 'alerts_cache';
-
-let BOT_URL = localStorage.getItem(LS_BOT_URL) || '';
-let API_KEY = localStorage.getItem(LS_API_KEY) || '';
 
 const DEFAULT_STOCKS = ['BBCA', 'BBRI', 'BMRI', 'BBNI', 'PTRO', 'PTBA', 'BUMI', 'ANTM', 'TLKM', 'ASII', 'UNVR', 'GOTO'];
 
@@ -235,19 +234,18 @@ let alerts = [];
 let botOnline = false;
 
 // ==========================================================
-// API CLIENT
+// API CLIENT — Via Vercel Proxy
 // ==========================================================
 async function botApi(endpoint, options = {}) {
-  if (!BOT_URL || !API_KEY) throw new Error('Bot not configured');
-  const url = `${BOT_URL.replace(/\/$/, '')}/api${endpoint}`;
+  // Relative URL — /api/* ditangkap oleh Vercel serverless function
+  const url = `/api${endpoint}`;
   const res = await fetch(url, {
     ...options,
-    headers: { 'X-API-Key': API_KEY, 'Content-Type': 'application/json', ...options.headers },
-    mode: 'cors',
+    headers: { 'Content-Type': 'application/json', ...options.headers },
   });
   if (!res.ok) {
     const err = await res.json().catch(() => ({ error: res.statusText }));
-    throw new Error(err.error || `HTTP ${res.status}`);
+    throw new Error(err.error || err.message || `HTTP ${res.status}`);
   }
   return res.json();
 }
@@ -272,20 +270,16 @@ function updateSyncStatus(level, msg) {
 // WATCHLIST
 // ==========================================================
 async function loadWatchlist() {
-  if (BOT_URL && API_KEY) {
-    try {
-      const data = await botApi('/watchlist');
-      watchlist = data.watchlist;
-      localStorage.setItem(LS_WATCHLIST_CACHE, JSON.stringify(watchlist));
-      botOnline = true;
-      updateSyncStatus('ok', 'Bot connected · Watchlist synced');
-      return;
-    } catch (e) {
-      botOnline = false;
-      updateSyncStatus('err', 'Bot offline — pakai cache lokal');
-    }
-  } else {
-    updateSyncStatus('err', 'Bot belum dikonfigurasi (set di index.html)');
+  try {
+    const data = await botApi('/watchlist');
+    watchlist = data.watchlist;
+    localStorage.setItem(LS_WATCHLIST_CACHE, JSON.stringify(watchlist));
+    botOnline = true;
+    updateSyncStatus('ok', 'Bot connected · Watchlist synced');
+    return;
+  } catch (e) {
+    botOnline = false;
+    updateSyncStatus('err', 'Bot offline — pakai cache lokal');
   }
   // Fallback cache
   const cache = localStorage.getItem(LS_WATCHLIST_CACHE);
@@ -337,7 +331,7 @@ async function removeStock(ticker) {
 // ALERTS
 // ==========================================================
 async function loadAlerts() {
-  if (BOT_URL && API_KEY && botOnline) {
+  if (botOnline) {
     try {
       const data = await botApi('/alerts');
       alerts = data.alerts;
