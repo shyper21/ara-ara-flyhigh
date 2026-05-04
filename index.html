@@ -1661,47 +1661,84 @@ function calcDCA() {
 
 // ── AI Prediction ──
 async function fetchDcaPrediction() {
-  if (!dcaLastCalc) {
-    // auto-calc first
-    calcDCA();
-    if (!dcaLastCalc) return;
+  // ── Step 1: Selalu build payload dari tab AKTIF sekarang ──
+  let payload = null;
+
+  if (dcaTab === 'emas') {
+    const monthly = parseFloat(document.getElementById('dcaAmount').value);
+    const months  = parseInt(document.getElementById('dcaMonths').value);
+    if (!monthly || !months || monthly <= 0 || months <= 0) {
+      alert('Isi jumlah nabung dan durasi untuk Emas dulu.'); return;
+    }
+    payload = { asset_type: 'gold', ticker: '', monthly, months };
+
+  } else if (dcaTab === 'saham') {
+    const monthly = parseFloat(document.getElementById('dcaSahamAmount').value);
+    const months  = parseInt(document.getElementById('dcaSahamMonths').value);
+    const ticker  = document.getElementById('dcaSahamTicker').value.toUpperCase().trim();
+    if (!ticker) { alert('Isi ticker saham dulu (contoh: BBCA).'); return; }
+    if (!monthly || !months || monthly <= 0 || months <= 0) {
+      alert('Isi jumlah nabung dan durasi.'); return;
+    }
+    payload = { asset_type: 'saham', ticker, monthly, months };
+
+  } else {  // crypto
+    const monthly = parseFloat(document.getElementById('dcaCryptoAmount').value);
+    const months  = parseInt(document.getElementById('dcaCryptoMonths').value);
+    const ticker  = document.getElementById('dcaCryptoCoin').value;
+    if (!monthly || !months || monthly <= 0 || months <= 0) {
+      alert('Isi jumlah nabung dan durasi untuk Crypto dulu.'); return;
+    }
+    payload = { asset_type: 'crypto', ticker, monthly, months };
   }
 
+  // ── Step 2: Run calc dulu biar angka di UI fresh ──
+  calcDCA();
+
+  // ── Step 3: Show loading state ──
   const contentEl = document.getElementById('dcaAiContent');
   const sourcesEl = document.getElementById('dcaAiSources');
   const btn       = document.getElementById('calcDcaAiBtn');
   const assetEl   = document.getElementById('dcaAiAsset');
 
+  const assetLabels = {
+    gold:   'Emas Antam',
+    saham:  `Saham ${payload.ticker}`,
+    crypto: `Crypto ${payload.ticker}`,
+  };
+
   btn.textContent = '⏳ Memuat...';
   btn.classList.add('loading');
-  assetEl.textContent = dcaLastCalc.asset_label;
+  assetEl.textContent = assetLabels[payload.asset_type] || '';
   contentEl.innerHTML = '<div class="dca-ai-loading"><div class="dca-ai-spinner"></div><span>AI sedang menganalisis...</span></div>';
   sourcesEl.style.display = 'none';
 
+  // ── Step 4: Fetch prediction ──
   try {
     const data = await botApi('/dca-predict', {
       method: 'POST',
-      body: JSON.stringify(dcaLastCalc),
+      body: JSON.stringify(payload),
     });
 
-    // Format AI text — convert **bold** markdown to <b>
-    const formatted = (data.prediction || '⚠ Tidak ada respons dari AI.')
+    // Format teks — convert **bold** markdown ke <b>
+    const text = (data.prediction || '⚠ Tidak ada respons dari AI.')
       .replace(/\*\*(.*?)\*\*/g, '<b>$1</b>')
+      .replace(/\*(.*?)\*/g, '<i>$1</i>')
       .replace(/\n/g, '<br>');
 
-    contentEl.innerHTML = `<div style="color:var(--text)">${formatted}</div>`;
+    contentEl.innerHTML = `<div style="color:var(--text)">${text}</div>`;
 
     if (data.sources && data.sources.length) {
       sourcesEl.style.display = 'block';
-      sourcesEl.innerHTML = '🌐 Sumber:<br>' + data.sources.map(s =>
-        `<a href="${s.url}" target="_blank" rel="noopener">${s.title || s.url}</a>`
-      ).join('');
+      sourcesEl.innerHTML = '🌐 Sumber:<br>' + data.sources
+        .map(s => `<a href="${escHtml(s.url)}" target="_blank" rel="noopener">${escHtml(s.title || s.url)}</a>`)
+        .join('');
     }
 
   } catch (e) {
     contentEl.innerHTML =
-      `<div style="color:var(--down)">⚠ Gagal: ${e.message}<br><br>` +
-      `Pastikan bot online dan GEMINI_API_KEY sudah diset di Railway.</div>`;
+      `<div style="color:var(--down)">⚠ Gagal: ${escHtml(e.message)}<br><br>` +
+      `Pastikan bot online dan GEMINI_API_KEY / GROQ_API_KEY sudah diset di Railway.</div>`;
   } finally {
     btn.textContent = '✨ Prediksi AI';
     btn.classList.remove('loading');
