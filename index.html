@@ -590,6 +590,152 @@
   @media (max-width: 900px) {
     .dca-body { grid-template-columns: 1fr; }
   }
+
+  /* ======================================================
+     RESPONSIVE — MOBILE FRIENDLY
+  ====================================================== */
+
+  /* ── Tablet dan layar kecil (≤ 768px) ── */
+  @media (max-width: 768px) {
+    body { padding: 16px; }
+
+    /* Header */
+    header { gap: 12px; padding-bottom: 16px; margin-bottom: 20px; }
+    .status { align-items: flex-start; }
+
+    /* Nav — scroll horizontal agar tidak meluber */
+    nav {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      flex-wrap: nowrap;
+      scrollbar-width: none;
+    }
+    nav::-webkit-scrollbar { display: none; }
+    nav a { padding: 12px 16px; white-space: nowrap; flex-shrink: 0; }
+
+    /* Antam card */
+    .antam-card { padding: 18px; }
+    .antam-head { flex-direction: column; align-items: flex-start; gap: 8px; }
+    .antam-settings { flex-direction: column; align-items: flex-start; }
+    .antam-settings input { width: 120px; }
+
+    /* FX Table — tampilkan hanya Pair + Rate (sembunyikan Nama & Inverse) */
+    .fx-head,
+    .fx-row { grid-template-columns: 80px 1fr; gap: 8px; padding: 12px 14px; }
+    .fx-head > :nth-child(2),
+    .fx-row > :nth-child(2),
+    .fx-head > :nth-child(4),
+    .fx-row > :nth-child(4) { display: none; }
+
+    /* Crypto Table — sembunyikan kolom IDR */
+    .crypto-head,
+    .crypto-row { grid-template-columns: 1fr 1fr 72px; gap: 8px; padding: 12px 14px; }
+    .crypto-head > :nth-child(3),
+    .crypto-row > :nth-child(3) { display: none; }
+
+    /* Tools row — satu kolom */
+    .tools-row { grid-template-columns: 1fr; }
+    .tool-panel { padding: 20px; }
+
+    /* Fear & Greed + Converter — tumpuk vertikal */
+    .fg-converter-row { grid-template-columns: 1fr; }
+    .fg-panel { padding: 24px; }
+    .fg-dial-wrap { width: 180px; height: 100px; }
+    .fg-dial-wrap svg { width: 180px; height: 100px; }
+
+    /* Converter row — tumpuk vertikal */
+    .converter-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: flex-end;
+    }
+    .converter-row .field-group:first-child { flex: 1 1 100%; }
+    .converter-row .field-group:nth-child(2) { flex: 1 1 40%; }
+    .converter-row .field-group:nth-child(4) { flex: 1 1 40%; }
+    .converter-swap { flex: 0 0 auto; margin-bottom: 0; align-self: flex-end; }
+
+    /* DCA */
+    .dca-tabs { overflow-x: auto; -webkit-overflow-scrolling: touch; flex-wrap: nowrap; }
+    .dca-tab { white-space: nowrap; flex-shrink: 0; padding: 10px 14px; font-size: 10px; }
+    .dca-inputs { padding: 20px; }
+    .dca-ai-panel { padding: 20px; min-height: 200px; }
+    .dca-actions { gap: 8px; }
+
+    /* Section */
+    .section { margin-bottom: 32px; }
+    .tv-wrapper { height: 350px; }
+
+    /* News */
+    .news-grid { grid-template-columns: 1fr; }
+    .news-controls { gap: 8px; }
+
+    /* Conv all */
+    .conv-all-wrap { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); }
+  }
+
+  /* ── Ponsel kecil (≤ 480px) ── */
+  @media (max-width: 480px) {
+    body { padding: 10px; }
+
+    .brand h1 { font-size: 26px; }
+    .brand .subtitle { font-size: 10px; letter-spacing: 0.15em; margin-top: 8px; }
+
+    /* Nav */
+    nav a { padding: 10px 12px; font-size: 10px; letter-spacing: 0.15em; }
+
+    /* Antam */
+    .antam-grid { grid-template-columns: 1fr 1fr; }
+    .antam-item .value { font-size: 19px; }
+    .antam-settings input { width: 100%; }
+
+    /* FX row lebih compact */
+    .fx-row, .fx-head { padding: 10px 12px; }
+    .fx-pair { font-size: 12px; }
+    .fx-rate { font-size: 12px; }
+
+    /* Crypto compact */
+    .crypto-name { font-size: 15px; }
+    .crypto-price { font-size: 12px; }
+    .crypto-change { font-size: 11px; }
+
+    /* Field rows — 1 kolom penuh */
+    .field-row { grid-template-columns: 1fr; }
+    .field-row.triple { grid-template-columns: 1fr; }
+
+    /* DCA tabs */
+    .dca-tab { padding: 10px 10px; font-size: 9px; }
+    .dca-actions { flex-direction: column; }
+    .dca-actions .calc-btn { width: 100%; }
+
+    /* Fear & Greed prev row */
+    .fg-prev-row { gap: 10px; flex-wrap: wrap; }
+    .fg-prev-item { flex: 1 1 80px; text-align: center; }
+
+    /* Converter hasil */
+    .conv-main { font-size: 18px; }
+    .conv-all-wrap { grid-template-columns: 1fr 1fr; }
+
+    /* Section title */
+    .section-title { font-size: 10px; letter-spacing: 0.2em; }
+    .section-title .count { font-size: 9px; }
+
+    /* Sync banner */
+    .sync-banner, .weekend-warn { font-size: 10px; padding: 8px 12px; }
+
+    /* News */
+    .news-card { padding: 16px 18px; }
+    .news-title { font-size: 13px; }
+    .news-controls { flex-wrap: wrap; }
+    .news-filter-btn { padding: 5px 10px; font-size: 9px; }
+    .btn-minimal { font-size: 9px; padding: 5px 10px; }
+
+    /* Chart */
+    .tv-wrapper { height: 280px; }
+
+    /* Footer */
+    footer { font-size: 9px; margin-top: 32px; line-height: 1.8; }
+  }
 </style>
 </head>
 <body>
