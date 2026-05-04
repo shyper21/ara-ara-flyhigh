@@ -15,7 +15,7 @@
 <link rel="apple-touch-icon" href="/icon-192.png">
 <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
 <link rel="icon" type="image/png" sizes="512x512" href="/icon-512.png">
-<meta name="description" content="Dashboard pribadi: Saham IDX, Emas, Forex, Crypto">
+<meta name="description" content="Dashboard pribadi: Saham IDX, Emas, Forex, Crypto, Berita">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -86,29 +86,6 @@
   }
   nav a:hover { color: var(--text); }
   nav a.active { color: var(--gold); border-bottom-color: var(--gold); }
-
-  /* Bot config banner */
-  .config-banner {
-    background: rgba(212, 165, 74, 0.08);
-    border: 1px solid var(--warn); padding: 16px 20px;
-    margin-bottom: 24px; font-size: 12px;
-    display: flex; gap: 12px; align-items: center;
-    flex-wrap: wrap;
-  }
-  .config-banner.hidden { display: none; }
-  .config-banner input {
-    flex: 1; background: var(--bg); border: 1px solid var(--border-light);
-    color: var(--text); padding: 8px 12px;
-    font-family: inherit; font-size: 12px; min-width: 200px;
-  }
-  .config-banner input:focus { outline: none; border-color: var(--gold); }
-  .btn-primary {
-    background: var(--gold); color: var(--bg);
-    border: 1px solid var(--gold); padding: 8px 16px;
-    font-family: inherit; font-size: 11px; font-weight: 700;
-    letter-spacing: 0.15em; text-transform: uppercase; cursor: pointer;
-  }
-  .btn-primary:hover { background: var(--gold-bright); }
 
   .sync-banner {
     background: rgba(125, 200, 140, 0.08);
@@ -221,6 +198,111 @@
   .crypto-change.up { color: var(--up); }
   .crypto-change.down { color: var(--down); }
 
+  /* ======================================================
+     NEWS SECTION STYLES
+  ====================================================== */
+  .news-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+  }
+
+  .news-card {
+    background: var(--bg-card);
+    padding: 20px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    transition: background 0.15s;
+    position: relative;
+  }
+  .news-card:hover { background: var(--bg-elev); }
+
+  /* Accent bar on left */
+  .news-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 16px; bottom: 16px;
+    width: 2px;
+    background: var(--border-light);
+    transition: background 0.15s;
+  }
+  .news-card:hover::before { background: var(--gold); }
+
+  .news-source {
+    display: flex; align-items: center; gap: 8px;
+  }
+  .news-source-name {
+    font-size: 9px; text-transform: uppercase; letter-spacing: 0.25em;
+    color: var(--gold); font-weight: 700;
+  }
+  .news-source-time {
+    font-size: 9px; color: var(--text-muted); letter-spacing: 0.1em;
+    margin-left: auto;
+  }
+
+  .news-title {
+    font-family: 'Fraunces', serif;
+    font-size: 14px; font-weight: 500;
+    line-height: 1.45; color: var(--text);
+    text-decoration: none;
+    display: block;
+    transition: color 0.15s;
+  }
+  .news-title:hover { color: var(--gold-bright); }
+
+  .news-tickers {
+    display: flex; gap: 6px; flex-wrap: wrap; margin-top: 2px;
+  }
+  .news-ticker-tag {
+    font-size: 9px; letter-spacing: 0.15em; font-weight: 700;
+    padding: 2px 7px;
+    background: rgba(201, 169, 74, 0.12);
+    border: 1px solid rgba(201, 169, 74, 0.3);
+    color: var(--gold);
+  }
+
+  .news-read-link {
+    font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--text-muted); text-decoration: none;
+    display: inline-flex; align-items: center; gap: 6px;
+    transition: color 0.15s; margin-top: auto;
+  }
+  .news-read-link:hover { color: var(--gold); }
+  .news-read-link::after { content: '→'; transition: transform 0.15s; }
+  .news-read-link:hover::after { transform: translateX(3px); }
+
+  /* Empty / loading states */
+  .news-empty {
+    padding: 40px; text-align: center;
+    color: var(--text-muted); font-size: 12px;
+    letter-spacing: 0.1em; background: var(--bg-card);
+    border: 1px solid var(--border);
+  }
+  .news-loading { color: var(--text-muted); font-size: 11px; letter-spacing: 0.2em; }
+  .news-loading::after { content: '...'; animation: dots 1.5s infinite; }
+
+  /* Refresh controls */
+  .news-controls {
+    display: flex; align-items: center; gap: 12px;
+    margin-bottom: 16px; flex-wrap: wrap;
+  }
+  .news-filter-btn {
+    background: transparent; border: 1px solid var(--border);
+    color: var(--text-muted); padding: 5px 12px;
+    font-family: inherit; font-size: 10px; letter-spacing: 0.15em;
+    text-transform: uppercase; cursor: pointer; transition: all 0.2s;
+  }
+  .news-filter-btn.active { border-color: var(--gold); color: var(--gold); background: rgba(201,169,74,0.08); }
+  .news-filter-btn:hover { border-color: var(--border-light); color: var(--text); }
+
+  .news-last-updated {
+    margin-left: auto; font-size: 10px; color: var(--text-muted);
+    letter-spacing: 0.1em;
+  }
+
   .tv-wrapper {
     background: var(--bg-card); border: 1px solid var(--border);
     padding: 2px; height: 500px;
@@ -238,6 +320,178 @@
   footer a { color: var(--text-dim); text-decoration: none; }
   footer a:hover { color: var(--gold); }
 
+  /* ======================================================
+     TOOLS ROW — 2-col layout for small widgets
+  ====================================================== */
+  .tools-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    margin-bottom: 48px;
+  }
+  .tool-panel {
+    background: var(--bg-card);
+    padding: 28px 28px 24px;
+  }
+  .tool-title {
+    font-family: 'Fraunces', serif; font-size: 13px; font-weight: 500;
+    letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold);
+    margin-bottom: 20px; display: flex; align-items: center; gap: 10px;
+  }
+  .tool-title .icon { font-size: 16px; }
+
+  /* Input rows shared style */
+  .field-row {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;
+  }
+  .field-row.single { grid-template-columns: 1fr; }
+  .field-row.triple { grid-template-columns: 1fr 1fr 1fr; }
+  .field-group { display: flex; flex-direction: column; gap: 5px; }
+  .field-label {
+    font-size: 9px; text-transform: uppercase; letter-spacing: 0.2em;
+    color: var(--text-muted);
+  }
+  .field-input {
+    background: var(--bg); border: 1px solid var(--border-light);
+    color: var(--text); padding: 8px 10px;
+    font-family: 'JetBrains Mono', monospace; font-size: 13px;
+    width: 100%; transition: border-color 0.2s;
+  }
+  .field-input:focus { outline: none; border-color: var(--gold); }
+  .field-select {
+    background: var(--bg); border: 1px solid var(--border-light);
+    color: var(--text); padding: 8px 10px;
+    font-family: 'JetBrains Mono', monospace; font-size: 12px;
+    width: 100%; cursor: pointer; transition: border-color 0.2s;
+  }
+  .field-select:focus { outline: none; border-color: var(--gold); }
+  .calc-btn {
+    background: transparent; border: 1px solid var(--gold);
+    color: var(--gold); padding: 9px 20px;
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    cursor: pointer; transition: all 0.2s; margin-top: 4px;
+    width: 100%;
+  }
+  .calc-btn:hover { background: var(--gold); color: var(--bg); }
+
+  /* Result boxes */
+  .result-box {
+    margin-top: 16px; border-top: 1px dashed var(--border);
+    padding-top: 16px; display: none;
+  }
+  .result-box.visible { display: block; }
+  .result-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 14px;
+  }
+  .result-item .r-label {
+    font-size: 9px; text-transform: uppercase; letter-spacing: 0.2em;
+    color: var(--text-muted); margin-bottom: 4px;
+  }
+  .result-item .r-value {
+    font-family: 'Fraunces', serif; font-size: 18px;
+    font-weight: 500; color: var(--text); line-height: 1.2;
+  }
+  .result-item .r-value.pos { color: var(--up); }
+  .result-item .r-value.neg { color: var(--down); }
+  .result-item .r-value.gold { color: var(--gold); }
+  .result-note {
+    font-size: 10px; color: var(--text-muted);
+    margin-top: 10px; letter-spacing: 0.05em; line-height: 1.5;
+  }
+
+  /* ======================================================
+     FEAR & GREED + CONVERTER ROW
+  ====================================================== */
+  .fg-converter-row {
+    display: grid;
+    grid-template-columns: 340px 1fr;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    margin-bottom: 48px;
+  }
+
+  /* Fear & Greed */
+  .fg-panel {
+    background: var(--bg-card);
+    padding: 28px;
+    display: flex; flex-direction: column; align-items: center;
+    justify-content: center; gap: 0;
+  }
+  .fg-dial-wrap { position: relative; width: 200px; height: 110px; margin-bottom: 12px; }
+  .fg-dial-wrap svg { width: 200px; height: 110px; overflow: visible; }
+  .fg-score-center {
+    position: absolute; bottom: 2px; left: 50%; transform: translateX(-50%);
+    text-align: center;
+  }
+  .fg-score-number {
+    font-family: 'Fraunces', serif; font-size: 38px; font-weight: 500;
+    line-height: 1; color: var(--text);
+  }
+  .fg-score-label {
+    font-size: 10px; text-transform: uppercase; letter-spacing: 0.25em;
+    color: var(--text-dim); margin-top: 4px; display: block;
+  }
+  .fg-meta {
+    font-size: 9px; text-transform: uppercase; letter-spacing: 0.2em;
+    color: var(--text-muted); text-align: center; margin-top: 6px;
+  }
+  .fg-prev-row {
+    display: flex; gap: 20px; margin-top: 14px;
+    border-top: 1px dashed var(--border); padding-top: 14px; width: 100%;
+    justify-content: center;
+  }
+  .fg-prev-item { text-align: center; }
+  .fg-prev-label { font-size: 9px; letter-spacing: 0.15em; color: var(--text-muted); text-transform: uppercase; }
+  .fg-prev-val { font-size: 12px; font-weight: 500; color: var(--text-dim); margin-top: 3px; }
+
+  /* Converter */
+  .converter-panel {
+    background: var(--bg-card);
+    padding: 28px 28px 24px;
+  }
+  .converter-row {
+    display: grid; grid-template-columns: 120px 1fr 26px 1fr; gap: 10px;
+    align-items: end; margin-bottom: 12px;
+  }
+  .converter-swap {
+    background: transparent; border: 1px solid var(--border-light);
+    color: var(--text-dim); font-size: 14px; padding: 8px 4px;
+    cursor: pointer; transition: all 0.2s; font-family: inherit;
+    text-align: center;
+  }
+  .converter-swap:hover { border-color: var(--gold); color: var(--gold); }
+  .converter-result {
+    margin-top: 16px; padding: 14px 16px;
+    background: var(--bg-elev); border: 1px dashed var(--border-light);
+    min-height: 54px; display: flex; flex-direction: column; gap: 4px;
+  }
+  .conv-main {
+    font-family: 'Fraunces', serif; font-size: 22px; font-weight: 500;
+    color: var(--gold);
+  }
+  .conv-rate { font-size: 10px; color: var(--text-muted); letter-spacing: 0.1em; }
+  .conv-all-wrap {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 6px; margin-top: 12px;
+  }
+  .conv-all-item {
+    padding: 6px 10px; background: var(--bg-elev);
+    border: 1px solid var(--border); font-size: 11px;
+    display: flex; justify-content: space-between; gap: 8px;
+  }
+  .conv-all-code { color: var(--gold); letter-spacing: 0.1em; }
+  .conv-all-val { color: var(--text-dim); }
+
+  @media (max-width: 900px) {
+    .tools-row { grid-template-columns: 1fr; }
+    .fg-converter-row { grid-template-columns: 1fr; }
+    .fg-converter-row .fg-panel { padding: 24px; }
+  }
   @media (max-width: 640px) {
     body { padding: 16px; }
     nav a { padding: 12px 16px; font-size: 10px; }
@@ -246,6 +500,10 @@
     .crypto-row, .crypto-head { grid-template-columns: 100px 1fr 90px; gap: 10px; }
     .crypto-row > :nth-child(3), .crypto-head > :nth-child(3) { display: none; }
     .tv-wrapper { height: 400px; }
+    .news-grid { grid-template-columns: 1fr; }
+    .field-row { grid-template-columns: 1fr; }
+    .converter-row { grid-template-columns: 1fr 1fr; }
+    .converter-row .field-group:nth-child(2), .converter-row .field-group:nth-child(4) { display: none; }
   }
 </style>
 </head>
@@ -255,7 +513,7 @@
     <header>
       <div class="brand">
         <h1><span>Market</span> Terminal</h1>
-        <div class="subtitle">Logam · Forex · Crypto · Sync Bot</div>
+        <div class="subtitle">Logam · Forex · Crypto · Berita · Sync Bot</div>
       </div>
       <div class="status">
         <div class="status-row">
@@ -283,6 +541,9 @@
       <div><b>Market Emas Dunia Tutup (Weekend)</b> — Data akan fresh lagi Senin pagi.</div>
     </div>
 
+    <!-- ========================
+         ANTAM SECTION
+    ========================= -->
     <section class="section">
       <h2 class="section-title">
         Emas Antam (Estimasi)
@@ -326,6 +587,9 @@
       </div>
     </section>
 
+    <!-- ========================
+         METALS SECTION
+    ========================= -->
     <section class="section">
       <h2 class="section-title">Logam Mulia Dunia<span class="count">Spot Price</span></h2>
       <div class="grid-metals" id="metalsGrid">
@@ -346,6 +610,9 @@
       </div>
     </section>
 
+    <!-- ========================
+         FOREX SECTION
+    ========================= -->
     <section class="section">
       <h2 class="section-title">Kurs Mata Uang → IDR<span class="count">Live</span></h2>
       <div class="fx-table">
@@ -358,6 +625,9 @@
       </div>
     </section>
 
+    <!-- ========================
+         CRYPTO SECTION
+    ========================= -->
     <section class="section">
       <h2 class="section-title">Cryptocurrency<span class="count">Top Assets</span></h2>
       <div class="crypto-table">
@@ -371,6 +641,238 @@
       </div>
     </section>
 
+    <!-- ========================
+         NEWS SECTION (BARU)
+    ========================= -->
+    <section class="section" id="newsSection">
+
+    <!-- ========================
+         TOOLS ROW: Portfolio + DCA
+    ========================= -->
+    <section class="section">
+      <h2 class="section-title">Kalkulator Pribadi<span class="count">Portfolio · DCA</span></h2>
+      <div class="tools-row">
+
+        <!-- Portfolio Calculator -->
+        <div class="tool-panel">
+          <div class="tool-title"><span class="icon">📊</span> Portfolio Emas</div>
+          <div class="field-row">
+            <div class="field-group">
+              <span class="field-label">Jumlah (gram)</span>
+              <input type="number" class="field-input" id="portGrams" placeholder="e.g. 10" min="0" step="0.1">
+            </div>
+            <div class="field-group">
+              <span class="field-label">Harga Beli / gram (Rp)</span>
+              <input type="number" class="field-input" id="portBuyPrice" placeholder="e.g. 1450000" min="0">
+            </div>
+          </div>
+          <div class="field-row single">
+            <div class="field-group">
+              <span class="field-label">Aset</span>
+              <select class="field-select" id="portAsset">
+                <option value="antam_sell">Antam (harga jual sekarang)</option>
+                <option value="spot">Spot Emas Dunia (IDR/gram)</option>
+              </select>
+            </div>
+          </div>
+          <button class="calc-btn" id="calcPortBtn">Hitung P&amp;L</button>
+          <div class="result-box" id="portResult">
+            <div class="result-grid">
+              <div class="result-item">
+                <div class="r-label">Modal</div>
+                <div class="r-value" id="portCapital">—</div>
+              </div>
+              <div class="result-item">
+                <div class="r-label">Nilai Sekarang</div>
+                <div class="r-value gold" id="portCurrent">—</div>
+              </div>
+              <div class="result-item">
+                <div class="r-label">Unrealized P&amp;L</div>
+                <div class="r-value" id="portPnl">—</div>
+              </div>
+              <div class="result-item">
+                <div class="r-label">Return</div>
+                <div class="r-value" id="portPct">—</div>
+              </div>
+            </div>
+            <div class="result-note" id="portNote"></div>
+          </div>
+        </div>
+
+        <!-- DCA Simulator -->
+        <div class="tool-panel">
+          <div class="tool-title"><span class="icon">📈</span> Gold DCA Simulator</div>
+          <div class="field-row">
+            <div class="field-group">
+              <span class="field-label">Nabung / bulan (Rp)</span>
+              <input type="number" class="field-input" id="dcaAmount" placeholder="e.g. 500000" min="0">
+            </div>
+            <div class="field-group">
+              <span class="field-label">Durasi (bulan)</span>
+              <input type="number" class="field-input" id="dcaMonths" placeholder="e.g. 60" min="1" max="600">
+            </div>
+          </div>
+          <div class="field-row single">
+            <div class="field-group">
+              <span class="field-label">Harga beli diasumsikan</span>
+              <select class="field-select" id="dcaPriceMode">
+                <option value="current">Harga Antam sekarang (flat)</option>
+                <option value="spot">Spot IDR/gram sekarang (flat)</option>
+              </select>
+            </div>
+          </div>
+          <button class="calc-btn" id="calcDcaBtn">Simulasikan</button>
+          <div class="result-box" id="dcaResult">
+            <div class="result-grid">
+              <div class="result-item">
+                <div class="r-label">Total Diinvestasikan</div>
+                <div class="r-value" id="dcaTotalInvested">—</div>
+              </div>
+              <div class="result-item">
+                <div class="r-label">Total Gram Terkumpul</div>
+                <div class="r-value gold" id="dcaTotalGrams">—</div>
+              </div>
+              <div class="result-item">
+                <div class="r-label">Nilai di Harga Spot</div>
+                <div class="r-value" id="dcaCurrentVal">—</div>
+              </div>
+              <div class="result-item">
+                <div class="r-label">Return</div>
+                <div class="r-value" id="dcaReturn">—</div>
+              </div>
+            </div>
+            <div class="result-note" id="dcaNote"></div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ========================
+         FEAR & GREED + CONVERTER
+    ========================= -->
+    <section class="section">
+      <h2 class="section-title">Tools Tambahan<span class="count">Sentimen · Konversi</span></h2>
+      <div class="fg-converter-row">
+
+        <!-- Fear & Greed Index -->
+        <div class="fg-panel">
+          <div class="tool-title" style="margin-bottom:16px;"><span class="icon">🧠</span> Crypto Fear &amp; Greed</div>
+          <div class="fg-dial-wrap" id="fgDialWrap">
+            <svg viewBox="0 0 200 110" id="fgSvg">
+              <!-- Track arc (grey) -->
+              <path d="M 20 100 A 80 80 0 0 1 180 100" fill="none" stroke="#26262d" stroke-width="14" stroke-linecap="round"/>
+              <!-- Value arc (colored) -->
+              <path id="fgArc" d="M 20 100 A 80 80 0 0 1 180 100" fill="none" stroke="#c9a94a" stroke-width="14" stroke-linecap="round" stroke-dasharray="251.2" stroke-dashoffset="251.2"/>
+              <!-- Needle -->
+              <line id="fgNeedle" x1="100" y1="100" x2="100" y2="28" stroke="#e8e4d9" stroke-width="2" stroke-linecap="round" transform="rotate(0, 100, 100)" opacity="0.7"/>
+              <circle cx="100" cy="100" r="5" fill="#17171c" stroke="#e8e4d9" stroke-width="1.5"/>
+            </svg>
+            <div class="fg-score-center">
+              <div class="fg-score-number" id="fgScore">—</div>
+              <span class="fg-score-label" id="fgLabel">Loading...</span>
+            </div>
+          </div>
+          <div class="fg-meta" id="fgMeta">Indeks sentimen pasar crypto</div>
+          <div class="fg-prev-row">
+            <div class="fg-prev-item">
+              <div class="fg-prev-label">Kemarin</div>
+              <div class="fg-prev-val" id="fgYesterday">—</div>
+            </div>
+            <div class="fg-prev-item">
+              <div class="fg-prev-label">1 Minggu lalu</div>
+              <div class="fg-prev-val" id="fgWeek">—</div>
+            </div>
+            <div class="fg-prev-item">
+              <div class="fg-prev-label">1 Bulan lalu</div>
+              <div class="fg-prev-val" id="fgMonth">—</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Currency Converter -->
+        <div class="converter-panel">
+          <div class="tool-title" style="margin-bottom:16px;"><span class="icon">💱</span> Currency Converter</div>
+          <div class="converter-row">
+            <div class="field-group">
+              <span class="field-label">Jumlah</span>
+              <input type="number" class="field-input" id="convAmount" placeholder="1000000" value="1000000">
+            </div>
+            <div class="field-group">
+              <span class="field-label">Dari</span>
+              <select class="field-select" id="convFrom">
+                <option value="IDR" selected>IDR — Rupiah</option>
+                <option value="USD">USD — Dollar</option>
+                <option value="SGD">SGD — Sing Dollar</option>
+                <option value="EUR">EUR — Euro</option>
+                <option value="JPY">JPY — Yen</option>
+                <option value="GBP">GBP — Pound</option>
+                <option value="MYR">MYR — Ringgit</option>
+                <option value="CNY">CNY — Yuan</option>
+                <option value="AUD">AUD — Dollar AU</option>
+                <option value="THB">THB — Baht</option>
+                <option value="KRW">KRW — Won</option>
+                <option value="HKD">HKD — Dollar HK</option>
+                <option value="SAR">SAR — Riyal</option>
+              </select>
+            </div>
+            <button class="converter-swap" id="convSwap" title="Tukar arah">⇄</button>
+            <div class="field-group">
+              <span class="field-label">Ke</span>
+              <select class="field-select" id="convTo">
+                <option value="IDR">IDR — Rupiah</option>
+                <option value="USD" selected>USD — Dollar</option>
+                <option value="SGD">SGD — Sing Dollar</option>
+                <option value="EUR">EUR — Euro</option>
+                <option value="JPY">JPY — Yen</option>
+                <option value="GBP">GBP — Pound</option>
+                <option value="MYR">MYR — Ringgit</option>
+                <option value="CNY">CNY — Yuan</option>
+                <option value="AUD">AUD — Dollar AU</option>
+                <option value="THB">THB — Baht</option>
+                <option value="KRW">KRW — Won</option>
+                <option value="HKD">HKD — Dollar HK</option>
+                <option value="SAR">SAR — Riyal</option>
+              </select>
+            </div>
+          </div>
+          <div class="converter-result">
+            <div class="conv-main" id="convResult">Masukkan jumlah dan pilih mata uang</div>
+            <div class="conv-rate" id="convRate"></div>
+          </div>
+          <div style="margin-top: 10px; font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 10px;">Konversi cepat ke semua mata uang</div>
+          <div class="conv-all-wrap" id="convAllWrap"></div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ========================
+         NEWS SECTION
+    ========================= -->
+    <section class="section" id="newsSection">
+      <h2 class="section-title">
+        Berita Pasar
+        <span class="count" id="newsCount">— artikel</span>
+      </h2>
+
+      <div class="news-controls">
+        <button class="news-filter-btn active" data-filter="all" id="filterAll">Semua</button>
+        <button class="news-filter-btn" data-filter="indonesia" id="filterID">Indonesia</button>
+        <button class="news-filter-btn" data-filter="global" id="filterGlobal">Global</button>
+        <button class="news-filter-btn" data-filter="crypto" id="filterCrypto">Crypto</button>
+        <span class="news-last-updated" id="newsLastUpdated"></span>
+        <button class="btn-minimal" id="refreshNews" style="margin-left: 8px;">⟳ Refresh Berita</button>
+      </div>
+
+      <div id="newsGrid" class="news-grid">
+        <div class="news-empty"><span class="news-loading">Memuat berita</span></div>
+      </div>
+    </section>
+
+    <!-- ========================
+         BTC CHART SECTION
+    ========================= -->
     <section class="section">
       <h2 class="section-title">Bitcoin Chart<span class="count">Live</span></h2>
       <div class="tv-wrapper"><div id="tv-btc-chart" style="height:100%;width:100%"></div></div>
@@ -385,12 +887,10 @@
 
 <script>
 // ==========================================================
-// CONFIGURATION — VERCEL PROXY MODE
-// ==========================================================
-// URL & API Key DISEMBUNYIKAN di Vercel env vars (server-side).
-// Dashboard hanya fetch ke /api/* relative URL, tidak perlu config.
+// CONFIGURATION
 // ==========================================================
 const REFRESH_INTERVAL = 5 * 60 * 1000;
+const NEWS_REFRESH_INTERVAL = 5 * 60 * 1000; // 5 menit
 const GRAMS_PER_OZ = 31.1034768;
 
 const FX_PAIRS = [
@@ -417,6 +917,14 @@ const CRYPTOS = [
   { id: 'tether', name: 'Tether', sym: 'USDT' },
 ];
 
+// Klasifikasi sumber berita untuk filter
+const NEWS_SOURCE_CATEGORY = {
+  'Kontan': 'indonesia', 'CNBC Indonesia': 'indonesia', 'CNBC Market': 'indonesia',
+  'Bisnis.com': 'indonesia', 'Detik Finance': 'indonesia',
+  'CoinDesk': 'crypto', 'Cointelegraph': 'crypto',
+  'Yahoo Finance': 'global', 'CNBC Markets': 'global', 'Reuters Biz': 'global',
+};
+
 // ==========================================================
 // FORMATTERS
 // ==========================================================
@@ -425,22 +933,25 @@ const fmtUSDsmall = n => n == null ? '—' : '$' + n.toLocaleString('en-US', { m
 const fmtIDR = n => n == null ? '—' : 'Rp ' + Math.round(n).toLocaleString('id-ID');
 const fmtPct = n => n == null ? '—' : (n >= 0 ? '+' : '') + n.toFixed(2) + '%';
 
+function timeAgo(isoStr) {
+  if (!isoStr) return '';
+  try {
+    const diff = (Date.now() - new Date(isoStr).getTime()) / 1000;
+    if (diff < 60) return 'Baru saja';
+    if (diff < 3600) return `${Math.floor(diff / 60)} menit lalu`;
+    if (diff < 86400) return `${Math.floor(diff / 3600)} jam lalu`;
+    return `${Math.floor(diff / 86400)} hari lalu`;
+  } catch { return ''; }
+}
+
 // ==========================================================
 // BOT API CLIENT — via Vercel Proxy
 // ==========================================================
-// Request dikirim ke /api/* relative URL.
-// Vercel serverless function (api/[...path].js) akan forward
-// ke bot Railway dengan API Key tersembunyi.
-// ==========================================================
 async function botApi(endpoint, options = {}) {
-  // Relative URL — auto jalan di Vercel deployment
   const url = `/api${endpoint}`;
   const res = await fetch(url, {
     ...options,
-    headers: {
-      'Content-Type': 'application/json',
-      ...options.headers,
-    },
+    headers: { 'Content-Type': 'application/json', ...options.headers },
   });
   if (!res.ok) {
     const err = await res.json().catch(() => ({ error: res.statusText }));
@@ -468,7 +979,6 @@ function updateSyncStatus(level, msg) {
   const pulse = document.getElementById('syncPulse');
   const banner = document.getElementById('syncBanner');
   const status = document.getElementById('syncStatus');
-
   status.textContent = msg;
   if (level === 'ok') {
     pulse.classList.remove('offline');
@@ -484,7 +994,7 @@ function updateSyncStatus(level, msg) {
 }
 
 // ==========================================================
-// FETCH DATA — MARKET (independent of bot)
+// FETCH DATA — MARKET
 // ==========================================================
 async function fetchJson(url) {
   const r = await fetch(url);
@@ -514,6 +1024,84 @@ async function fetchCrypto() {
 }
 
 // ==========================================================
+// NEWS FETCH — via Bot API
+// ==========================================================
+let allNewsArticles = [];
+let activeFilter = 'all';
+
+async function fetchNews() {
+  if (!botOnline) return;
+  try {
+    const data = await botApi('/news?limit=20');
+    allNewsArticles = data.articles || [];
+    const now = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+    document.getElementById('newsLastUpdated').textContent = `Updated ${now} WIB`;
+    renderNews(activeFilter);
+  } catch (e) {
+    console.warn('[News] Fetch failed:', e.message);
+    if (allNewsArticles.length === 0) {
+      document.getElementById('newsGrid').innerHTML =
+        `<div class="news-empty">📭 Belum ada berita. Bot perlu GEMINI_API_KEY atau news_fetcher.py.</div>`;
+    }
+  }
+}
+
+function renderNews(filter = 'all') {
+  activeFilter = filter;
+  const container = document.getElementById('newsGrid');
+
+  // Update active filter button
+  document.querySelectorAll('.news-filter-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.filter === filter);
+  });
+
+  let articles = allNewsArticles;
+
+  if (filter !== 'all') {
+    articles = articles.filter(a => {
+      const cat = NEWS_SOURCE_CATEGORY[a.source] || 'global';
+      return cat === filter;
+    });
+  }
+
+  document.getElementById('newsCount').textContent = `${articles.length} artikel`;
+
+  if (!articles.length) {
+    container.innerHTML = `<div class="news-empty">📭 Tidak ada berita untuk filter ini.</div>`;
+    return;
+  }
+
+  container.innerHTML = articles.map(a => {
+    const tickers = (a.tickers || '').split(',').filter(Boolean);
+    const tickerTags = tickers.map(t =>
+      `<span class="news-ticker-tag">${t.trim()}</span>`
+    ).join('');
+    const timeStr = timeAgo(a.published_at || a.published);
+
+    return `
+      <div class="news-card">
+        <div class="news-source">
+          <span class="news-source-name">${escHtml(a.source || '—')}</span>
+          <span class="news-source-time">${timeStr}</span>
+        </div>
+        <a class="news-title" href="${escHtml(a.link || a.url || '#')}" target="_blank" rel="noopener">
+          ${escHtml(a.title || '')}
+        </a>
+        ${tickerTags ? `<div class="news-tickers">${tickerTags}</div>` : ''}
+        <a class="news-read-link" href="${escHtml(a.link || a.url || '#')}" target="_blank" rel="noopener">
+          Baca selengkapnya
+        </a>
+      </div>`;
+  }).join('');
+}
+
+function escHtml(str) {
+  return String(str)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+// ==========================================================
 // ANTAM PREMIUM — Sync with Bot
 // ==========================================================
 async function loadAntamPremium() {
@@ -529,7 +1117,6 @@ async function loadAntamPremium() {
       statusEl.textContent = '⚠️ Pakai default';
     }
   }
-  // Fallback ke localStorage atau default
   const sell = parseFloat(localStorage.getItem('antam_premium_sell')) || 8.5;
   const buy = parseFloat(localStorage.getItem('antam_premium_buy')) || 1.5;
   document.getElementById('premiumSell').value = sell;
@@ -541,22 +1128,12 @@ async function saveAntamPremium() {
   const sell = parseFloat(document.getElementById('premiumSell').value);
   const buy = parseFloat(document.getElementById('premiumBuy').value);
   const statusEl = document.getElementById('antamSyncStatus');
-
-  if (isNaN(sell) || isNaN(buy)) {
-    alert('Premium harus angka');
-    return;
-  }
-
-  // Save lokal dulu
+  if (isNaN(sell) || isNaN(buy)) { alert('Premium harus angka'); return; }
   localStorage.setItem('antam_premium_sell', sell);
   localStorage.setItem('antam_premium_buy', buy);
-
   if (botOnline) {
     try {
-      await botApi('/settings/antam-premium', {
-        method: 'POST',
-        body: JSON.stringify({ sell, buy }),
-      });
+      await botApi('/settings/antam-premium', { method: 'POST', body: JSON.stringify({ sell, buy }) });
       statusEl.textContent = '✓ Synced ke bot';
     } catch (e) {
       statusEl.textContent = '⚠️ Lokal only: ' + e.message;
@@ -568,7 +1145,7 @@ async function saveAntamPremium() {
 }
 
 // ==========================================================
-// RENDER
+// RENDER — MARKET DATA
 // ==========================================================
 function renderAntam(xauUsd, usdToIdr, premium) {
   if (xauUsd == null || usdToIdr == null) {
@@ -584,6 +1161,12 @@ function renderAntam(xauUsd, usdToIdr, premium) {
   document.getElementById('antamBuy').textContent = fmtIDR(buy);
   document.getElementById('antamSpot').textContent = fmtIDR(spotPerGramIdr);
   document.getElementById('antamSpread').textContent = fmtIDR(sell - buy);
+
+  // Update live state for calculators
+  liveState.xauUsd       = xauUsd;
+  liveState.usdToIdr     = usdToIdr;
+  liveState.antamSpotIdr = spotPerGramIdr;
+  liveState.antamSellIdr = sell;
 }
 
 function renderMetals(metals, usdToIdr) {
@@ -591,11 +1174,7 @@ function renderMetals(metals, usdToIdr) {
     const sym = card.dataset.metal;
     const priceUsd = metals[sym];
     const priceEl = card.querySelector('.price-main');
-    if (priceUsd == null) {
-      priceEl.textContent = 'N/A';
-      priceEl.classList.remove('loading');
-      return;
-    }
+    if (priceUsd == null) { priceEl.textContent = 'N/A'; priceEl.classList.remove('loading'); return; }
     const usdGram = priceUsd / GRAMS_PER_OZ;
     const idrGram = usdToIdr ? usdGram * usdToIdr : null;
     priceEl.textContent = fmtUSD(priceUsd);
@@ -611,6 +1190,9 @@ function renderForex(rates) {
     container.innerHTML = '<div class="fx-row"><span style="color:var(--down)">Gagal memuat</span></div>';
     return;
   }
+  // Store for converter
+  liveState.fxRates = rates;
+
   const idrPerUsd = rates.IDR;
   container.innerHTML = FX_PAIRS.map(p => {
     const rate = rates[p.code];
@@ -625,6 +1207,9 @@ function renderForex(rates) {
         <div class="fx-inverse">${idrToUnit.toLocaleString('en-US', { minimumFractionDigits: 6, maximumFractionDigits: 8 })}</div>
       </div>`;
   }).join('');
+
+  // Auto-run converter with live rates
+  convertCurrency();
 }
 
 function renderCrypto(data) {
@@ -674,8 +1259,273 @@ function loadBtcChart() {
 }
 
 // ==========================================================
-// MAIN LOOP
+// LIVE MARKET STATE — shared with calculators
 // ==========================================================
+let liveState = {
+  xauUsd: null, usdToIdr: null,
+  antamSpotIdr: null, antamSellIdr: null,
+  fxRates: null,
+};
+
+// ==========================================================
+// PORTFOLIO CALCULATOR
+// ==========================================================
+function calcPortfolio() {
+  const grams    = parseFloat(document.getElementById('portGrams').value);
+  const buyPrice = parseFloat(document.getElementById('portBuyPrice').value);
+  const asset    = document.getElementById('portAsset').value;
+
+  if (!grams || !buyPrice || grams <= 0 || buyPrice <= 0) {
+    alert('Isi jumlah gram dan harga beli terlebih dahulu.');
+    return;
+  }
+
+  let currentPricePerGram = null;
+  let priceLabel = '';
+
+  if (asset === 'antam_sell') {
+    currentPricePerGram = liveState.antamSellIdr;
+    priceLabel = 'Antam harga jual';
+  } else {
+    currentPricePerGram = liveState.antamSpotIdr;
+    priceLabel = 'Spot IDR/gram';
+  }
+
+  if (!currentPricePerGram) {
+    alert('Data harga belum tersedia. Tunggu sebentar lalu coba lagi.');
+    return;
+  }
+
+  const modal   = grams * buyPrice;
+  const current = grams * currentPricePerGram;
+  const pnl     = current - modal;
+  const pct     = (pnl / modal) * 100;
+
+  document.getElementById('portCapital').textContent  = fmtIDR(modal);
+  document.getElementById('portCurrent').textContent  = fmtIDR(current);
+
+  const pnlEl = document.getElementById('portPnl');
+  const pctEl = document.getElementById('portPct');
+  pnlEl.textContent = (pnl >= 0 ? '+' : '') + fmtIDR(pnl);
+  pnlEl.className   = 'r-value ' + (pnl >= 0 ? 'pos' : 'neg');
+  pctEl.textContent = (pct >= 0 ? '+' : '') + pct.toFixed(2) + '%';
+  pctEl.className   = 'r-value ' + (pct >= 0 ? 'pos' : 'neg');
+
+  document.getElementById('portNote').textContent =
+    `${grams}g × ${fmtIDR(buyPrice)}/g beli — sekarang ${priceLabel} ${fmtIDR(currentPricePerGram)}/g`;
+
+  document.getElementById('portResult').classList.add('visible');
+}
+
+// ==========================================================
+// DCA SIMULATOR
+// ==========================================================
+function calcDCA() {
+  const monthly = parseFloat(document.getElementById('dcaAmount').value);
+  const months  = parseInt(document.getElementById('dcaMonths').value);
+  const mode    = document.getElementById('dcaPriceMode').value;
+
+  if (!monthly || !months || monthly <= 0 || months <= 0) {
+    alert('Isi jumlah nabung dan durasi terlebih dahulu.');
+    return;
+  }
+
+  let pricePerGram = mode === 'current' ? liveState.antamSellIdr : liveState.antamSpotIdr;
+  if (!pricePerGram) {
+    alert('Data harga belum tersedia. Tunggu sebentar lalu coba lagi.');
+    return;
+  }
+
+  const totalInvested  = monthly * months;
+  const gramsPerMonth  = monthly / pricePerGram;
+  const totalGrams     = gramsPerMonth * months;
+
+  // Nilai di spot sekarang
+  const spotVal        = totalGrams * (liveState.antamSpotIdr || pricePerGram);
+  const returnPct      = ((spotVal - totalInvested) / totalInvested) * 100;
+
+  document.getElementById('dcaTotalInvested').textContent = fmtIDR(totalInvested);
+  document.getElementById('dcaTotalGrams').textContent    = totalGrams.toFixed(4) + ' gram';
+  document.getElementById('dcaCurrentVal').textContent    = fmtIDR(spotVal);
+
+  const retEl = document.getElementById('dcaReturn');
+  retEl.textContent = (returnPct >= 0 ? '+' : '') + returnPct.toFixed(2) + '%';
+  retEl.className   = 'r-value ' + (returnPct >= 0 ? 'pos' : 'neg');
+
+  const years = months >= 12 ? (months / 12).toFixed(1) + ' tahun' : months + ' bulan';
+  document.getElementById('dcaNote').textContent =
+    `Nabung ${fmtIDR(monthly)}/bulan selama ${years} — asumsi harga flat ${fmtIDR(pricePerGram)}/gram. `
+    + `Simulasi ini tidak memperhitungkan perubahan harga historis.`;
+
+  document.getElementById('dcaResult').classList.add('visible');
+}
+
+// ==========================================================
+// FEAR & GREED INDEX
+// ==========================================================
+const FG_COLORS = {
+  'Extreme Fear': '#e27d7d', 'Fear': '#d4a54a',
+  'Neutral': '#8b8678', 'Greed': '#7dc88c', 'Extreme Greed': '#4ab87d',
+};
+
+function fgColor(score) {
+  if (score <= 24) return FG_COLORS['Extreme Fear'];
+  if (score <= 44) return FG_COLORS['Fear'];
+  if (score <= 54) return FG_COLORS['Neutral'];
+  if (score <= 74) return FG_COLORS['Greed'];
+  return FG_COLORS['Extreme Greed'];
+}
+
+function fgLabelFromScore(score) {
+  if (score <= 24) return 'Extreme Fear';
+  if (score <= 44) return 'Fear';
+  if (score <= 54) return 'Neutral';
+  if (score <= 74) return 'Greed';
+  return 'Extreme Greed';
+}
+
+function fgLabelID(label) {
+  const m = {
+    'Extreme Fear': 'Ketakutan Ekstrem', 'Fear': 'Ketakutan',
+    'Neutral': 'Netral', 'Greed': 'Keserakahan',
+    'Extreme Greed': 'Keserakahan Ekstrem',
+  };
+  return m[label] || label;
+}
+
+function renderFearGreed(score, label, yesterday, week, month) {
+  const scoreEl = document.getElementById('fgScore');
+  const labelEl = document.getElementById('fgLabel');
+  const arc     = document.getElementById('fgArc');
+  const needle  = document.getElementById('fgNeedle');
+
+  scoreEl.textContent = score;
+  labelEl.textContent = fgLabelID(label || fgLabelFromScore(score));
+
+  const color  = fgColor(score);
+  scoreEl.style.color = color;
+
+  // Arc: total path length ≈ 251.2, 0→100 maps to 0→251.2 offset
+  const pct    = score / 100;
+  const offset = 251.2 - pct * 251.2;
+  arc.setAttribute('stroke-dashoffset', offset);
+  arc.setAttribute('stroke', color);
+
+  // Needle: 0 = left (−90°), 100 = right (+90°), center = 0°
+  const angle  = (pct - 0.5) * 180;
+  needle.setAttribute('transform', `rotate(${angle}, 100, 100)`);
+
+  if (yesterday) document.getElementById('fgYesterday').textContent = yesterday + ' · ' + fgLabelID(fgLabelFromScore(+yesterday));
+  if (week)      document.getElementById('fgWeek').textContent      = week      + ' · ' + fgLabelID(fgLabelFromScore(+week));
+  if (month)     document.getElementById('fgMonth').textContent     = month     + ' · ' + fgLabelID(fgLabelFromScore(+month));
+}
+
+async function fetchFearGreed() {
+  try {
+    const r = await fetch('https://api.alternative.me/fng/?limit=30&format=json');
+    const d = await r.json();
+    if (!d.data || !d.data.length) return;
+    const [today, ...rest] = d.data;
+    const yesterday = rest.find(x => +x.timestamp > Date.now()/1000 - 172800);
+    const week      = rest.find(x => +x.timestamp > Date.now()/1000 - 691200);
+    const month     = rest[rest.length - 1];
+    renderFearGreed(
+      +today.value, today.value_classification,
+      yesterday?.value, week?.value, month?.value
+    );
+  } catch (e) {
+    document.getElementById('fgScore').textContent = 'N/A';
+    document.getElementById('fgLabel').textContent = 'Gagal memuat';
+  }
+}
+
+// ==========================================================
+// CURRENCY CONVERTER — uses liveState.fxRates (no extra fetch)
+// ==========================================================
+function convertCurrency() {
+  const amount  = parseFloat(document.getElementById('convAmount').value);
+  const fromCcy = document.getElementById('convFrom').value;
+  const toCcy   = document.getElementById('convTo').value;
+  const rates   = liveState.fxRates;
+
+  const resultEl = document.getElementById('convResult');
+  const rateEl   = document.getElementById('convRate');
+
+  if (!amount || isNaN(amount)) {
+    resultEl.textContent = 'Masukkan jumlah terlebih dahulu';
+    rateEl.textContent = '';
+    return;
+  }
+  if (!rates || !rates['IDR']) {
+    resultEl.textContent = 'Data kurs belum tersedia...';
+    rateEl.textContent = '';
+    return;
+  }
+
+  // All rates are USD-based, convert via USD
+  const toUSD = fromCcy === 'USD' ? amount : amount / rates[fromCcy];
+  const result = toCcy === 'USD' ? toUSD : toUSD * rates[toCcy];
+
+  const decimals = result > 1000 ? 0 : result > 1 ? 2 : 6;
+  const formatted = result.toLocaleString('id-ID', {
+    minimumFractionDigits: decimals, maximumFractionDigits: decimals,
+  });
+
+  resultEl.textContent = `${formatted} ${toCcy}`;
+
+  // Exchange rate label
+  const rate1 = 1 / (fromCcy === 'USD' ? 1 : rates[fromCcy]) * (toCcy === 'USD' ? 1 : rates[toCcy]);
+  rateEl.textContent = `1 ${fromCcy} = ${rate1.toLocaleString('id-ID', { maximumFractionDigits: 6 })} ${toCcy}`;
+
+  // Show all-currencies breakdown if converting FROM IDR or TO IDR
+  renderConvAll(amount, fromCcy, rates);
+}
+
+function renderConvAll(amount, fromCcy, rates) {
+  const container = document.getElementById('convAllWrap');
+  if (!rates) { container.innerHTML = ''; return; }
+  const ALL_CCY = ['USD','SGD','EUR','JPY','GBP','MYR','CNY','AUD','THB','KRW','HKD','SAR','IDR'];
+  const toUSD = fromCcy === 'USD' ? amount : amount / rates[fromCcy];
+
+  container.innerHTML = ALL_CCY
+    .filter(c => c !== fromCcy)
+    .map(c => {
+      const val = c === 'USD' ? toUSD : toUSD * rates[c];
+      const dec = val > 1000 ? 0 : val > 1 ? 2 : 4;
+      return `<div class="conv-all-item">
+        <span class="conv-all-code">${c}</span>
+        <span class="conv-all-val">${val.toLocaleString('id-ID', { maximumFractionDigits: dec })}</span>
+      </div>`;
+    }).join('');
+}
+
+// Swap currencies
+document.getElementById('convSwap').addEventListener('click', () => {
+  const from = document.getElementById('convFrom');
+  const to   = document.getElementById('convTo');
+  [from.value, to.value] = [to.value, from.value];
+  convertCurrency();
+});
+
+// Live convert on any input change
+['convAmount', 'convFrom', 'convTo'].forEach(id => {
+  document.getElementById(id).addEventListener('input', convertCurrency);
+  document.getElementById(id).addEventListener('change', convertCurrency);
+});
+
+// Calc buttons
+document.getElementById('calcPortBtn').addEventListener('click', calcPortfolio);
+document.getElementById('calcDcaBtn').addEventListener('click', calcDCA);
+
+// Also recalc if Enter pressed in inputs
+['portGrams', 'portBuyPrice'].forEach(id =>
+  document.getElementById(id).addEventListener('keydown', e => e.key === 'Enter' && calcPortfolio())
+);
+['dcaAmount', 'dcaMonths'].forEach(id =>
+  document.getElementById(id).addEventListener('keydown', e => e.key === 'Enter' && calcDCA())
+);
+
+
 async function loadAll() {
   await checkBotConnection();
 
@@ -693,17 +1543,35 @@ async function loadAll() {
   renderMetals(metals, usdToIdr);
   renderForex(rates);
   renderCrypto(crypto);
+
+  // Fetch berita setelah market data
+  fetchNews();
 }
 
-// Event listeners
+// ==========================================================
+// EVENT LISTENERS
+// ==========================================================
 document.getElementById('refreshBtn').addEventListener('click', loadAll);
 document.getElementById('saveSettings').addEventListener('click', saveAntamPremium);
+document.getElementById('refreshNews').addEventListener('click', fetchNews);
 
-// Init
+// News filter buttons
+document.querySelectorAll('.news-filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => renderNews(btn.dataset.filter));
+});
+
+// ==========================================================
+// INIT
+// ==========================================================
 showWeekendWarning();
 loadBtcChart();
 loadAll();
+fetchFearGreed();
+
+// Refresh market setiap 5 menit, berita setiap 5 menit (offset 30 detik)
 setInterval(loadAll, REFRESH_INTERVAL);
+setInterval(fetchNews, NEWS_REFRESH_INTERVAL);
+setInterval(fetchFearGreed, 15 * 60 * 1000); // refresh F&G tiap 15 menit
 
 // ==========================================================
 // SERVICE WORKER REGISTRATION (PWA)
@@ -716,12 +1584,10 @@ if ('serviceWorker' in navigator) {
   });
 }
 
-// Install prompt for Add to Home Screen
 let deferredInstallPrompt = null;
 window.addEventListener('beforeinstallprompt', (e) => {
   e.preventDefault();
   deferredInstallPrompt = e;
-  // Bisa tampilkan tombol install custom di sini
   console.log('[PWA] Install prompt ready');
 });
 </script>
