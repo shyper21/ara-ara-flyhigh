@@ -487,23 +487,108 @@
   .conv-all-code { color: var(--gold); letter-spacing: 0.1em; }
   .conv-all-val { color: var(--text-dim); }
 
-  @media (max-width: 900px) {
-    .tools-row { grid-template-columns: 1fr; }
-    .fg-converter-row { grid-template-columns: 1fr; }
-    .fg-converter-row .fg-panel { padding: 24px; }
+  /* ======================================================
+     DCA SIMULATOR — EXPANDED
+  ====================================================== */
+  .dca-tabs {
+    display: flex; gap: 0;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 0;
   }
-  @media (max-width: 640px) {
-    body { padding: 16px; }
-    nav a { padding: 12px 16px; font-size: 10px; }
-    .fx-row, .fx-head { grid-template-columns: 70px 1fr 90px; gap: 10px; }
-    .fx-inverse { display: none; }
-    .crypto-row, .crypto-head { grid-template-columns: 100px 1fr 90px; gap: 10px; }
-    .crypto-row > :nth-child(3), .crypto-head > :nth-child(3) { display: none; }
-    .tv-wrapper { height: 400px; }
-    .news-grid { grid-template-columns: 1fr; }
-    .field-row { grid-template-columns: 1fr; }
-    .converter-row { grid-template-columns: 1fr 1fr; }
-    .converter-row .field-group:nth-child(2), .converter-row .field-group:nth-child(4) { display: none; }
+  .dca-tab {
+    background: transparent; border: none; border-bottom: 2px solid transparent;
+    color: var(--text-muted); padding: 12px 22px;
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    cursor: pointer; transition: all 0.2s; margin-bottom: -1px;
+  }
+  .dca-tab:hover { color: var(--text); }
+  .dca-tab.active { color: var(--gold); border-bottom-color: var(--gold); }
+
+  .dca-body {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 1px; background: var(--border);
+    border: 1px solid var(--border); border-top: none;
+  }
+  .dca-inputs { background: var(--bg-card); padding: 28px 28px 20px; }
+  .dca-fields { }
+  .dca-actions { display: flex; gap: 8px; margin-top: 16px; }
+  .calc-btn.dca-ai-btn {
+    border-color: var(--up); color: var(--up);
+  }
+  .calc-btn.dca-ai-btn:hover { background: var(--up); color: var(--bg); }
+  .calc-btn.dca-ai-btn.loading {
+    border-color: var(--warn); color: var(--warn);
+    animation: btnPulse 1.5s ease-in-out infinite;
+  }
+  @keyframes btnPulse { 0%,100%{opacity:1} 50%{opacity:.5} }
+
+  .dca-price-live {
+    background: var(--bg); border: 1px solid var(--border-light);
+    padding: 8px 10px; font-size: 13px; color: var(--gold);
+    font-weight: 500; letter-spacing: 0.05em;
+  }
+  .dca-price-badge {
+    font-size: 10px; color: var(--up); letter-spacing: 0.1em;
+    margin-top: 4px; min-height: 16px;
+  }
+  .dca-price-badge.err { color: var(--down); }
+
+  /* AI panel */
+  .dca-ai-panel {
+    background: var(--bg-elev); padding: 28px 28px 20px;
+    display: flex; flex-direction: column; gap: 0;
+    min-height: 280px;
+  }
+  .dca-ai-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 16px; padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+    font-size: 11px; text-transform: uppercase; letter-spacing: 0.25em;
+    color: var(--up);
+  }
+  .dca-ai-asset {
+    font-family: 'Fraunces', serif; font-size: 13px;
+    color: var(--gold); text-transform: none; letter-spacing: 0;
+  }
+  .dca-ai-content {
+    flex: 1; font-size: 13px; line-height: 1.7;
+    color: var(--text-dim); white-space: pre-wrap;
+  }
+  .dca-ai-idle {
+    color: var(--text-muted); font-size: 12px; letter-spacing: 0.05em;
+    line-height: 1.7; border-left: 2px solid var(--border);
+    padding-left: 14px; margin-top: 8px;
+  }
+  .dca-ai-loading {
+    display: flex; align-items: center; gap: 12px;
+    color: var(--text-muted); font-size: 11px; letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+  .dca-ai-spinner {
+    width: 14px; height: 14px; border: 1.5px solid var(--border-light);
+    border-top-color: var(--up); border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .dca-ai-sources {
+    margin-top: 14px; padding-top: 12px;
+    border-top: 1px dashed var(--border);
+    font-size: 10px; color: var(--text-muted);
+  }
+  .dca-ai-sources a {
+    color: var(--text-dim); text-decoration: none; letter-spacing: 0.05em;
+    display: block; margin-top: 4px;
+  }
+  .dca-ai-sources a:hover { color: var(--gold); }
+
+  .dca-disclaimer {
+    font-size: 10px; color: var(--down); letter-spacing: 0.1em;
+    margin-top: 12px; opacity: 0.7;
+  }
+
+  @media (max-width: 900px) {
+    .dca-body { grid-template-columns: 1fr; }
   }
 </style>
 </head>
@@ -699,29 +784,116 @@
           </div>
         </div>
 
-        <!-- DCA Simulator -->
-        <div class="tool-panel">
-          <div class="tool-title"><span class="icon">📈</span> Gold DCA Simulator</div>
-          <div class="field-row">
-            <div class="field-group">
-              <span class="field-label">Nabung / bulan (Rp)</span>
-              <input type="number" class="field-input" id="dcaAmount" placeholder="e.g. 500000" min="0">
+        <!-- DCA panel moved to its own section below -->
+
+      </div>
+    </section>
+
+    <!-- ========================
+         DCA SIMULATOR — EXPANDED
+    ========================= -->
+    <section class="section">
+      <h2 class="section-title">DCA Simulator<span class="count">Emas · Saham · Crypto + AI</span></h2>
+
+      <!-- Asset type tabs -->
+      <div class="dca-tabs" id="dcaTabs">
+        <button class="dca-tab active" data-tab="emas">🥇 Emas Antam</button>
+        <button class="dca-tab" data-tab="saham">📊 Saham IDX</button>
+        <button class="dca-tab" data-tab="crypto">₿ Crypto</button>
+      </div>
+
+      <div class="dca-body">
+        <!-- ─── Left: inputs ─── -->
+        <div class="dca-inputs">
+
+          <!-- EMAS fields -->
+          <div class="dca-fields" id="dcaFields-emas">
+            <div class="field-row">
+              <div class="field-group">
+                <span class="field-label">Nabung / bulan (Rp)</span>
+                <input type="number" class="field-input" id="dcaAmount" placeholder="500000" min="0">
+              </div>
+              <div class="field-group">
+                <span class="field-label">Durasi (bulan)</span>
+                <input type="number" class="field-input" id="dcaMonths" placeholder="60" min="1" max="600">
+              </div>
             </div>
-            <div class="field-group">
-              <span class="field-label">Durasi (bulan)</span>
-              <input type="number" class="field-input" id="dcaMonths" placeholder="e.g. 60" min="1" max="600">
+            <div class="field-row single">
+              <div class="field-group">
+                <span class="field-label">Harga acuan</span>
+                <select class="field-select" id="dcaPriceMode">
+                  <option value="current">Antam harga jual (estimasi)</option>
+                  <option value="spot">Spot IDR/gram (lebih rendah)</option>
+                </select>
+              </div>
             </div>
           </div>
-          <div class="field-row single">
-            <div class="field-group">
-              <span class="field-label">Harga beli diasumsikan</span>
-              <select class="field-select" id="dcaPriceMode">
-                <option value="current">Harga Antam sekarang (flat)</option>
-                <option value="spot">Spot IDR/gram sekarang (flat)</option>
-              </select>
+
+          <!-- SAHAM fields -->
+          <div class="dca-fields" id="dcaFields-saham" style="display:none">
+            <div class="field-row">
+              <div class="field-group">
+                <span class="field-label">Ticker Saham IDX</span>
+                <div style="display:flex;gap:8px">
+                  <input type="text" class="field-input" id="dcaSahamTicker" placeholder="BBCA" maxlength="10" style="text-transform:uppercase">
+                  <button class="btn-minimal" id="dcaSahamFetch" style="white-space:nowrap;padding:8px 12px">Cek Harga</button>
+                </div>
+              </div>
+              <div class="field-group">
+                <span class="field-label">Harga / lembar (Rp)</span>
+                <input type="number" class="field-input" id="dcaSahamPrice" placeholder="Auto setelah Cek" min="0">
+              </div>
+            </div>
+            <div class="field-row">
+              <div class="field-group">
+                <span class="field-label">Nabung / bulan (Rp)</span>
+                <input type="number" class="field-input" id="dcaSahamAmount" placeholder="500000" min="0">
+              </div>
+              <div class="field-group">
+                <span class="field-label">Durasi (bulan)</span>
+                <input type="number" class="field-input" id="dcaSahamMonths" placeholder="60" min="1" max="600">
+              </div>
+            </div>
+            <div class="dca-price-badge" id="dcaSahamPriceBadge"></div>
+          </div>
+
+          <!-- CRYPTO fields -->
+          <div class="dca-fields" id="dcaFields-crypto" style="display:none">
+            <div class="field-row">
+              <div class="field-group">
+                <span class="field-label">Koin</span>
+                <select class="field-select" id="dcaCryptoCoin">
+                  <option value="BTC">Bitcoin (BTC)</option>
+                  <option value="ETH">Ethereum (ETH)</option>
+                  <option value="SOL">Solana (SOL)</option>
+                  <option value="XRP">XRP</option>
+                  <option value="HYPE">Hyperliquid (HYPE)</option>
+                </select>
+              </div>
+              <div class="field-group">
+                <span class="field-label">Harga sekarang</span>
+                <div class="dca-price-live" id="dcaCryptoLivePrice">— Memuat...</div>
+              </div>
+            </div>
+            <div class="field-row">
+              <div class="field-group">
+                <span class="field-label">Nabung / bulan (Rp)</span>
+                <input type="number" class="field-input" id="dcaCryptoAmount" placeholder="500000" min="0">
+              </div>
+              <div class="field-group">
+                <span class="field-label">Durasi (bulan)</span>
+                <input type="number" class="field-input" id="dcaCryptoMonths" placeholder="60" min="1" max="600">
+              </div>
             </div>
           </div>
-          <button class="calc-btn" id="calcDcaBtn">Simulasikan</button>
+
+          <!-- Action buttons -->
+          <div class="dca-actions">
+            <button class="calc-btn" id="calcDcaBtn" style="flex:1">Simulasikan</button>
+            <button class="calc-btn dca-ai-btn" id="calcDcaAiBtn" style="flex:1">✨ Prediksi AI</button>
+          </div>
+
+          <!-- Numeric results -->
           <div class="result-box" id="dcaResult">
             <div class="result-grid">
               <div class="result-item">
@@ -729,15 +901,15 @@
                 <div class="r-value" id="dcaTotalInvested">—</div>
               </div>
               <div class="result-item">
-                <div class="r-label">Total Gram Terkumpul</div>
-                <div class="r-value gold" id="dcaTotalGrams">—</div>
+                <div class="r-label" id="dcaUnit1Label">Unit Terkumpul</div>
+                <div class="r-value gold" id="dcaTotalUnits">—</div>
               </div>
               <div class="result-item">
-                <div class="r-label">Nilai di Harga Spot</div>
+                <div class="r-label">Nilai di Harga Kini</div>
                 <div class="r-value" id="dcaCurrentVal">—</div>
               </div>
               <div class="result-item">
-                <div class="r-label">Return</div>
+                <div class="r-label">Estimasi Return</div>
                 <div class="r-value" id="dcaReturn">—</div>
               </div>
             </div>
@@ -745,7 +917,21 @@
           </div>
         </div>
 
+        <!-- ─── Right: AI prediction ─── -->
+        <div class="dca-ai-panel" id="dcaAiPanel">
+          <div class="dca-ai-header">
+            <span>🤖 Prediksi AI</span>
+            <span class="dca-ai-asset" id="dcaAiAsset"></span>
+          </div>
+          <div class="dca-ai-content" id="dcaAiContent">
+            <div class="dca-ai-idle">
+              Klik <b>✨ Prediksi AI</b> setelah mengisi simulasi untuk mendapatkan analisis prospek, risiko, dan proyeksi return dari AI.
+            </div>
+          </div>
+          <div class="dca-ai-sources" id="dcaAiSources" style="display:none"></div>
+        </div>
       </div>
+
     </section>
 
     <!-- ========================
@@ -1218,6 +1404,9 @@ function renderCrypto(data) {
     container.innerHTML = '<div class="crypto-row"><span style="color:var(--down)">Gagal memuat</span></div>';
     return;
   }
+  // Store for DCA simulator
+  storeCryptoPricesForDCA(data);
+
   container.innerHTML = CRYPTOS.map(c => {
     const d = data[c.id];
     if (!d) return '';
@@ -1318,47 +1507,208 @@ function calcPortfolio() {
 }
 
 // ==========================================================
-// DCA SIMULATOR
+// DCA SIMULATOR — MULTI ASSET + AI
 // ==========================================================
+let dcaTab         = 'emas';
+let dcaCryptoPrices = {};   // { BTC: { usd, idr }, ... }
+let dcaLastCalc    = null;  // for AI prediction context
+
+// Populate crypto prices from existing renderCrypto data
+function storeCryptoPricesForDCA(data) {
+  if (!data) return;
+  const MAP = { bitcoin:'BTC', ethereum:'ETH', solana:'SOL', ripple:'XRP', hyperliquid:'HYPE' };
+  for (const [id, sym] of Object.entries(MAP)) {
+    if (data[id]) dcaCryptoPrices[sym] = { usd: data[id].usd, idr: data[id].idr };
+  }
+  updateCryptoLiveDisplay();
+}
+
+function updateCryptoLiveDisplay() {
+  const coin = document.getElementById('dcaCryptoCoin')?.value || 'BTC';
+  const el   = document.getElementById('dcaCryptoLivePrice');
+  if (!el) return;
+  const p = dcaCryptoPrices[coin];
+  el.textContent = p
+    ? `$${p.usd.toLocaleString('en-US', { maximumFractionDigits: 2 })} · ${fmtIDR(p.idr)}`
+    : '— Menunggu data...';
+}
+
+// Tab switching
+function switchDcaTab(tab) {
+  dcaTab = tab;
+  document.querySelectorAll('.dca-tab').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
+  document.querySelectorAll('.dca-fields').forEach(f => f.style.display = 'none');
+  document.getElementById('dcaFields-' + tab).style.display = '';
+  // Reset results
+  document.getElementById('dcaResult').classList.remove('visible');
+  resetAiPanel();
+  if (tab === 'crypto') updateCryptoLiveDisplay();
+}
+
+document.querySelectorAll('.dca-tab').forEach(btn =>
+  btn.addEventListener('click', () => switchDcaTab(btn.dataset.tab))
+);
+document.getElementById('dcaCryptoCoin')?.addEventListener('change', updateCryptoLiveDisplay);
+
+// Reset AI panel to idle state
+function resetAiPanel() {
+  document.getElementById('dcaAiContent').innerHTML =
+    '<div class="dca-ai-idle">Klik <b>✨ Prediksi AI</b> setelah mengisi simulasi.</div>';
+  document.getElementById('dcaAiAsset').textContent = '';
+  document.getElementById('dcaAiSources').style.display = 'none';
+}
+
+// ── Fetch saham price from bot ──
+async function fetchSahamPriceForDCA() {
+  const ticker = (document.getElementById('dcaSahamTicker').value || '').toUpperCase().trim();
+  const badge  = document.getElementById('dcaSahamPriceBadge');
+  const priceEl = document.getElementById('dcaSahamPrice');
+
+  if (!ticker) { badge.textContent = '⚠ Isi ticker dulu'; badge.className = 'dca-price-badge err'; return; }
+  if (!botOnline) { badge.textContent = '⚠ Bot offline, isi harga manual'; badge.className = 'dca-price-badge err'; return; }
+
+  badge.textContent = '⏳ Mengambil harga...';
+  badge.className   = 'dca-price-badge';
+  try {
+    const data = await botApi(`/price?type=saham&ticker=${ticker}`);
+    priceEl.value    = Math.round(data.price_idr);
+    badge.textContent = `✓ ${ticker}: ${data.label} (${data.pct_change >= 0 ? '+' : ''}${data.pct_change?.toFixed(2)}% hari ini)`;
+    badge.className  = 'dca-price-badge';
+  } catch (e) {
+    badge.textContent = `✗ ${e.message}`;
+    badge.className   = 'dca-price-badge err';
+  }
+}
+document.getElementById('dcaSahamFetch')?.addEventListener('click', fetchSahamPriceForDCA);
+
+// ── Client-side DCA calculation ──
 function calcDCA() {
-  const monthly = parseFloat(document.getElementById('dcaAmount').value);
-  const months  = parseInt(document.getElementById('dcaMonths').value);
-  const mode    = document.getElementById('dcaPriceMode').value;
+  let monthly, months, pricePerUnit, unitLabel, assetLabel, currentSpotVal;
+
+  if (dcaTab === 'emas') {
+    monthly   = parseFloat(document.getElementById('dcaAmount').value);
+    months    = parseInt(document.getElementById('dcaMonths').value);
+    const mode = document.getElementById('dcaPriceMode').value;
+    pricePerUnit = mode === 'current' ? liveState.antamSellIdr : liveState.antamSpotIdr;
+    unitLabel    = 'gram';
+    assetLabel   = 'Emas Antam';
+    currentSpotVal = liveState.antamSpotIdr;
+
+  } else if (dcaTab === 'saham') {
+    monthly   = parseFloat(document.getElementById('dcaSahamAmount').value);
+    months    = parseInt(document.getElementById('dcaSahamMonths').value);
+    pricePerUnit = parseFloat(document.getElementById('dcaSahamPrice').value);
+    const ticker  = document.getElementById('dcaSahamTicker').value.toUpperCase() || 'SAHAM';
+    unitLabel     = 'lembar';
+    assetLabel    = `Saham ${ticker}`;
+    currentSpotVal = pricePerUnit; // pakai harga sama (tidak ada perubahan harga client-side)
+
+  } else { // crypto
+    monthly   = parseFloat(document.getElementById('dcaCryptoAmount').value);
+    months    = parseInt(document.getElementById('dcaCryptoMonths').value);
+    const coin   = document.getElementById('dcaCryptoCoin').value;
+    const p      = dcaCryptoPrices[coin];
+    pricePerUnit = p ? p.idr : null;
+    unitLabel    = coin;
+    assetLabel   = `Crypto ${coin}`;
+    currentSpotVal = pricePerUnit;
+  }
 
   if (!monthly || !months || monthly <= 0 || months <= 0) {
-    alert('Isi jumlah nabung dan durasi terlebih dahulu.');
+    alert('Isi jumlah nabung dan durasi.');
+    return;
+  }
+  if (!pricePerUnit || pricePerUnit <= 0) {
+    alert('Harga belum tersedia. ' + (dcaTab === 'saham' ? 'Klik "Cek Harga" atau isi manual.' : 'Tunggu data live.'));
     return;
   }
 
-  let pricePerGram = mode === 'current' ? liveState.antamSellIdr : liveState.antamSpotIdr;
-  if (!pricePerGram) {
-    alert('Data harga belum tersedia. Tunggu sebentar lalu coba lagi.');
-    return;
-  }
-
-  const totalInvested  = monthly * months;
-  const gramsPerMonth  = monthly / pricePerGram;
-  const totalGrams     = gramsPerMonth * months;
-
-  // Nilai di spot sekarang
-  const spotVal        = totalGrams * (liveState.antamSpotIdr || pricePerGram);
-  const returnPct      = ((spotVal - totalInvested) / totalInvested) * 100;
+  const totalInvested = monthly * months;
+  const unitsPerMonth = monthly / pricePerUnit;
+  const totalUnits    = unitsPerMonth * months;
+  const currentValue  = totalUnits * (currentSpotVal || pricePerUnit);
+  const returnPct     = ((currentValue - totalInvested) / totalInvested) * 100;
+  const years         = months >= 12 ? (months / 12).toFixed(1) + ' tahun' : months + ' bulan';
 
   document.getElementById('dcaTotalInvested').textContent = fmtIDR(totalInvested);
-  document.getElementById('dcaTotalGrams').textContent    = totalGrams.toFixed(4) + ' gram';
-  document.getElementById('dcaCurrentVal').textContent    = fmtIDR(spotVal);
+  document.getElementById('dcaUnit1Label').textContent    = `Total ${unitLabel} terkumpul`;
+  document.getElementById('dcaTotalUnits').textContent    =
+    totalUnits < 1 ? totalUnits.toFixed(6) + ' ' + unitLabel
+                    : totalUnits.toFixed(dcaTab === 'saham' ? 0 : 4) + ' ' + unitLabel;
+  document.getElementById('dcaCurrentVal').textContent   = fmtIDR(currentValue);
 
   const retEl = document.getElementById('dcaReturn');
   retEl.textContent = (returnPct >= 0 ? '+' : '') + returnPct.toFixed(2) + '%';
   retEl.className   = 'r-value ' + (returnPct >= 0 ? 'pos' : 'neg');
 
-  const years = months >= 12 ? (months / 12).toFixed(1) + ' tahun' : months + ' bulan';
   document.getElementById('dcaNote').textContent =
-    `Nabung ${fmtIDR(monthly)}/bulan selama ${years} — asumsi harga flat ${fmtIDR(pricePerGram)}/gram. `
-    + `Simulasi ini tidak memperhitungkan perubahan harga historis.`;
+    `Nabung ${fmtIDR(monthly)}/bulan selama ${years} · asumsi harga flat ${fmtIDR(pricePerUnit)}/${unitLabel}. ` +
+    `Simulasi tidak memperhitungkan perubahan harga historis.`;
 
   document.getElementById('dcaResult').classList.add('visible');
+
+  // Save context for AI
+  dcaLastCalc = {
+    asset_type:  dcaTab === 'emas' ? 'gold' : dcaTab,
+    ticker:      dcaTab === 'saham'  ? document.getElementById('dcaSahamTicker').value.toUpperCase()
+                : dcaTab === 'crypto' ? document.getElementById('dcaCryptoCoin').value
+                : '',
+    monthly:     monthly,
+    months:      months,
+    asset_label: assetLabel,
+  };
 }
+
+// ── AI Prediction ──
+async function fetchDcaPrediction() {
+  if (!dcaLastCalc) {
+    // auto-calc first
+    calcDCA();
+    if (!dcaLastCalc) return;
+  }
+
+  const contentEl = document.getElementById('dcaAiContent');
+  const sourcesEl = document.getElementById('dcaAiSources');
+  const btn       = document.getElementById('calcDcaAiBtn');
+  const assetEl   = document.getElementById('dcaAiAsset');
+
+  btn.textContent = '⏳ Memuat...';
+  btn.classList.add('loading');
+  assetEl.textContent = dcaLastCalc.asset_label;
+  contentEl.innerHTML = '<div class="dca-ai-loading"><div class="dca-ai-spinner"></div><span>AI sedang menganalisis...</span></div>';
+  sourcesEl.style.display = 'none';
+
+  try {
+    const data = await botApi('/dca-predict', {
+      method: 'POST',
+      body: JSON.stringify(dcaLastCalc),
+    });
+
+    // Format AI text — convert **bold** markdown to <b>
+    const formatted = (data.prediction || '⚠ Tidak ada respons dari AI.')
+      .replace(/\*\*(.*?)\*\*/g, '<b>$1</b>')
+      .replace(/\n/g, '<br>');
+
+    contentEl.innerHTML = `<div style="color:var(--text)">${formatted}</div>`;
+
+    if (data.sources && data.sources.length) {
+      sourcesEl.style.display = 'block';
+      sourcesEl.innerHTML = '🌐 Sumber:<br>' + data.sources.map(s =>
+        `<a href="${s.url}" target="_blank" rel="noopener">${s.title || s.url}</a>`
+      ).join('');
+    }
+
+  } catch (e) {
+    contentEl.innerHTML =
+      `<div style="color:var(--down)">⚠ Gagal: ${e.message}<br><br>` +
+      `Pastikan bot online dan GEMINI_API_KEY sudah diset di Railway.</div>`;
+  } finally {
+    btn.textContent = '✨ Prediksi AI';
+    btn.classList.remove('loading');
+  }
+}
+
+
 
 // ==========================================================
 // FEAR & GREED INDEX
@@ -1554,15 +1904,28 @@ async function loadAll() {
 document.getElementById('refreshBtn').addEventListener('click', loadAll);
 document.getElementById('saveSettings').addEventListener('click', saveAntamPremium);
 document.getElementById('refreshNews').addEventListener('click', fetchNews);
+document.getElementById('calcPortBtn').addEventListener('click', calcPortfolio);
+document.getElementById('calcDcaBtn').addEventListener('click', calcDCA);
+document.getElementById('calcDcaAiBtn').addEventListener('click', fetchDcaPrediction);
 
-// News filter buttons
-document.querySelectorAll('.news-filter-btn').forEach(btn => {
-  btn.addEventListener('click', () => renderNews(btn.dataset.filter));
+// News filters
+document.querySelectorAll('.news-filter-btn').forEach(btn =>
+  btn.addEventListener('click', () => renderNews(btn.dataset.filter))
+);
+
+// Enter key shortcuts
+['portGrams','portBuyPrice'].forEach(id =>
+  document.getElementById(id)?.addEventListener('keydown', e => e.key === 'Enter' && calcPortfolio())
+);
+['dcaAmount','dcaMonths','dcaSahamAmount','dcaSahamMonths','dcaCryptoAmount','dcaCryptoMonths'].forEach(id =>
+  document.getElementById(id)?.addEventListener('keydown', e => e.key === 'Enter' && calcDCA())
+);
+document.getElementById('dcaSahamTicker')?.addEventListener('keydown', e => {
+  if (e.key === 'Enter') fetchSahamPriceForDCA();
 });
-
-// ==========================================================
-// INIT
-// ==========================================================
+document.getElementById('dcaSahamTicker')?.addEventListener('input', function() {
+  this.value = this.value.toUpperCase();
+});
 showWeekendWarning();
 loadBtcChart();
 loadAll();
