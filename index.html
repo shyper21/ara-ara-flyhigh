@@ -2137,5 +2137,234 @@ window.addEventListener('beforeinstallprompt', (e) => {
   console.log('[PWA] Install prompt ready');
 });
 </script>
+  <!-- ===== NEWS BOT WIDGET ===== -->
+<div id="news-bot-widget" style="position:fixed;bottom:24px;left:24px;z-index:9999">
+  <!-- Toggle Button -->
+  <button id="nb-toggle" onclick="toggleNewsBot()" style="
+    width:52px;height:52px;border-radius:50%;
+    background:#c9a94a;border:none;cursor:pointer;
+    font-size:20px;box-shadow:0 4px 16px rgba(201,169,74,0.4)">
+    📰
+  </button>
+  
+  <!-- Panel -->
+  <div id="nb-panel" style="
+    display:none;position:absolute;bottom:64px;left:0;
+    width:320px;background:#17171c;border:1px solid #c9a94a;
+    border-radius:12px;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,0.5)">
+    
+    <!-- Header -->
+    <div style="background:#c9a9 4a;padding:12px 16px;display:flex;justify-content:space-between;align-items:center">
+      <span style="color:#0b0b0d;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;letter-spacing:0.2em">📰 NEWS WATCHLIST</span>
+      <button onclick="refreshNewsBot()" style="background:none;border:none;color:#0b0b0d;cursor:pointer;font-size:14px">⟳</button>
+    </div>
+    
+    <!-- Filter tabs -->
+    <div style="display:flex;border-bottom:1px solid #26262d">
+      <button class="nb-tab active" onclick="setNBTab('all',this)" style="flex:1;padding:8px;background:transparent;border:none;color:#c9a94a;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.15em;cursor:pointer">SEMUA</button>
+      <button class="nb-tab" onclick="setNBTab('watchlist',this)" style="flex:1;padding:8px;background:transparent;border:none;color:#5a5650;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.15em;cursor:pointer">WATCHLIST</button>
+    </div>
+    
+    <!-- News list -->
+    <div id="nb-list" style="max-height:320px;overflow-y:auto;padding:8px"></div>
+    
+    <!-- Footer -->
+    <div style="padding:8px 12px;border-top:1px solid #26262d;font-size:9px;color:#5a5650;font-family:'JetBrains Mono',monospace;letter-spacing:0.1em" id="nb-footer">
+      Auto-refresh 5 menit
+    </div>
+  </div>
+</div>
+
+<!-- ===== AI ANALYST WIDGET ===== -->
+<div id="ai-bot-widget" style="position:fixed;bottom:24px;right:24px;z-index:9999">
+  <!-- Toggle Button -->
+  <button id="ab-toggle" onclick="toggleAiBot()" style="
+    width:52px;height:52px;border-radius:50%;
+    background:#7dc88c;border:none;cursor:pointer;
+    font-size:20px;box-shadow:0 4px 16px rgba(125,200,140,0.4)">
+    🤖
+  </button>
+  
+  <!-- Panel -->
+  <div id="ab-panel" style="
+    display:none;position:absolute;bottom:64px;right:0;
+    width:340px;background:#17171c;border:1px solid #7dc88c;
+    border-radius:12px;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,0.5)">
+    
+    <!-- Header -->
+    <div style="background:#7dc88c;padding:12px 16px;display:flex;justify-content:space-between;align-items:center">
+      <span style="color:#0b0b0d;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;letter-spacing:0.2em">🤖 AI ANALYST</span>
+      <button onclick="clearAiChat()" style="background:none;border:none;color:#0b0b0d;cursor:pointer;font-size:10px;letter-spacing:0.1em;font-family:inherit">CLEAR</button>
+    </div>
+    
+    <!-- Chat history -->
+    <div id="ab-messages" style="height:280px;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:8px"></div>
+    
+    <!-- Quick questions -->
+    <div style="padding:8px 12px;display:flex;gap:6px;flex-wrap:wrap;border-top:1px solid #26262d">
+      <button onclick="askQuick('Berita BBCA terbaru?')" style="padding:4px 8px;background:#26262d;border:1px solid #33333c;color:#8b8678;font-family:'JetBrains Mono',monospace;font-size:9px;cursor:pointer;border-radius:4px">BBCA</button>
+      <button onclick="askQuick('Analisis IHSG hari ini?')" style="padding:4px 8px;background:#26262d;border:1px solid #33333c;color:#8b8678;font-family:'JetBrains Mono',monospace;font-size:9px;cursor:pointer;border-radius:4px">IHSG</button>
+      <button onclick="askQuick('Rekomendasi saham hari ini?')" style="padding:4px 8px;background:#26262d;border:1px solid #33333c;color:#8b8678;font-family:'JetBrains Mono',monospace;font-size:9px;cursor:pointer;border-radius:4px">REKOMENDASI</button>
+    </div>
+    
+    <!-- Input -->
+    <div style="padding:8px 12px;display:flex;gap:8px;border-top:1px solid #26262d">
+      <input id="ab-input" type="text" placeholder="Tanya soal saham..." onkeydown="if(event.key==='Enter')sendAiMessage()" style="
+        flex:1;background:#0b0b0d;border:1px solid #33333c;
+        color:#e8e4d9;padding:8px 10px;
+        font-family:'JetBrains Mono',monospace;font-size:11px;border-radius:6px">
+      <button onclick="sendAiMessage()" style="
+        background:#7dc88c;border:none;color:#0b0b0d;
+        padding:8px 12px;cursor:pointer;font-size:14px;border-radius:6px">›</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// =============================================
+// NEWS BOT
+// =============================================
+let nbTab = 'all';
+let nbOpen = false;
+
+function toggleNewsBot() {
+  nbOpen = !nbOpen;
+  document.getElementById('nb-panel').style.display = nbOpen ? 'block' : 'none';
+  if (nbOpen) loadNBNews();
+}
+
+function setNBTab(tab, el) {
+  nbTab = tab;
+  document.querySelectorAll('.nb-tab').forEach(t => { t.style.color = '#5a5650'; });
+  el.style.color = '#c9a94a';
+  loadNBNews();
+}
+
+async function loadNBNews() {
+  const listEl = document.getElementById('nb-list');
+  const footerEl = document.getElementById('nb-footer');
+  listEl.innerHTML = '<div style="color:#5a5650;font-size:10px;padding:8px;font-family:\'JetBrains Mono\',monospace">Memuat berita...</div>';
+  
+  try {
+    let url = '/api/news?limit=10';
+    const data = await fetch(url).then(r => r.json());
+    let articles = data.articles || [];
+    
+    // Filter by watchlist if tab = watchlist
+    if (nbTab === 'watchlist' && typeof watchlist !== 'undefined' && watchlist.length) {
+      articles = articles.filter(a => {
+        const tickers = (a.tickers || '').toUpperCase();
+        return watchlist.some(t => tickers.includes(t));
+      });
+    }
+    
+    if (!articles.length) {
+      listEl.innerHTML = '<div style="color:#5a5650;font-size:10px;padding:12px;text-align:center;font-family:\'JetBrains Mono\',monospace">📭 Tidak ada berita</div>';
+      return;
+    }
+    
+    listEl.innerHTML = articles.map(a => {
+      const tickers = (a.tickers || '').split(',').filter(Boolean);
+      const tags = tickers.map(t => `<span style="background:rgba(201,169,74,0.15);color:#c9a94a;padding:1px 5px;font-size:8px;border-radius:2px;font-family:'JetBrains Mono',monospace">${t.trim()}</span>`).join(' ');
+      const time = timeAgo(a.published_at || a.published || '');
+      return `
+        <div style="padding:8px;border-bottom:1px solid #1e1e22;cursor:pointer" onclick="window.open('${a.link||a.url}','_blank')">
+          <div style="font-size:9px;color:#5a5650;font-family:'JetBrains Mono',monospace;margin-bottom:3px">${a.source||''} · ${time}</div>
+          <div style="font-size:11px;color:#e8e4d9;line-height:1.4;font-family:'JetBrains Mono',monospace">${(a.title||'').slice(0,80)}${(a.title||'').length>80?'...':''}</div>
+          ${tags ? `<div style="margin-top:4px;display:flex;gap:3px;flex-wrap:wrap">${tags}</div>` : ''}
+        </div>`;
+    }).join('');
+    
+    footerEl.textContent = `${articles.length} artikel · ${new Date().toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'})} WIB`;
+  } catch(e) {
+    listEl.innerHTML = `<div style="color:#e27d7d;font-size:10px;padding:8px;font-family:'JetBrains Mono',monospace">⚠ ${e.message}</div>`;
+  }
+}
+
+function refreshNewsBot() { loadNBNews(); }
+
+// Auto-refresh news bot setiap 5 menit
+setInterval(() => { if (nbOpen) loadNBNews(); }, 5 * 60 * 1000);
+
+// =============================================
+// AI ANALYST BOT
+// =============================================
+let abOpen = false;
+let abHistory = [];
+
+function toggleAiBot() {
+  abOpen = !abOpen;
+  document.getElementById('ab-panel').style.display = abOpen ? 'block' : 'none';
+  if (abOpen && abHistory.length === 0) {
+    addAbMessage('bot', '👋 Halo! Tanya apa saja soal saham IDX, emas, atau crypto. Saya punya akses ke harga real-time dan berita terkini.');
+  }
+}
+
+function clearAiChat() {
+  abHistory = [];
+  document.getElementById('ab-messages').innerHTML = '';
+  addAbMessage('bot', '🔄 Chat direset. Ada yang bisa saya bantu?');
+}
+
+function addAbMessage(role, text) {
+  const el = document.getElementById('ab-messages');
+  const isBot = role === 'bot';
+  const div = document.createElement('div');
+  div.style.cssText = `
+    padding:8px 10px;border-radius:8px;font-size:11px;line-height:1.5;
+    font-family:'JetBrains Mono',monospace;max-width:90%;
+    ${isBot ? 'background:#1e2a1e;color:#7dc88c;align-self:flex-start;border:1px solid #2a3a2a' 
+            : 'background:#1e2535;color:#e8e4d9;align-self:flex-end;border:1px solid #2d3748'}
+  `;
+  div.innerHTML = text.replace(/\*\*(.*?)\*\*/g,'<b>$1</b>').replace(/\n/g,'<br>');
+  el.appendChild(div);
+  el.scrollTop = el.scrollHeight;
+}
+
+function askQuick(q) {
+  document.getElementById('ab-input').value = q;
+  sendAiMessage();
+}
+
+async function sendAiMessage() {
+  const input = document.getElementById('ab-input');
+  const text = input.value.trim();
+  if (!text) return;
+  
+  input.value = '';
+  addAbMessage('user', text);
+  
+  // Loading indicator
+  const loadingId = 'ab-loading-' + Date.now();
+  const loadingDiv = document.createElement('div');
+  loadingDiv.id = loadingId;
+  loadingDiv.style.cssText = 'padding:8px 10px;border-radius:8px;font-size:10px;font-family:\'JetBrains Mono\',monospace;color:#5a5650;background:#1e2a1e;align-self:flex-start;border:1px solid #2a3a2a';
+  loadingDiv.textContent = '⏳ Menganalisis...';
+  document.getElementById('ab-messages').appendChild(loadingDiv);
+  
+  try {
+    // Kirim ke endpoint dca-predict atau buat endpoint /api/chat baru
+    // Untuk sekarang, pakai dca-predict sebagai AI proxy
+    const res = await fetch('/api/dca-predict', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        asset_type: 'gold',  // default, bisa dideteksi dari text
+        monthly: 500000,
+        months: 12,
+        _free_question: text  // flag untuk free question
+      })
+    });
+    
+    const data = await res.json();
+    loadingDiv.remove();
+    addAbMessage('bot', data.prediction || data.error || 'Tidak ada respons');
+    
+  } catch(e) {
+    loadingDiv.remove();
+    addAbMessage('bot', '⚠️ Error: ' + e.message + '\n\nPastikan bot Railway online.');
+  }
+}
+</script>
 </body>
 </html>
