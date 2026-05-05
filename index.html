@@ -2220,6 +2220,17 @@ window.addEventListener('beforeinstallprompt', (e) => {
   </div>
 </div>
 
+
+<!-- 
+  ============================================================
+  FIX: AI ANALYST WIDGET — ganti SELURUH blok <script> di bawah
+  "// =============================================
+  // AI ANALYST BOT
+  // ============================================="
+  sampai akhir dengan kode ini.
+  ============================================================
+-->
+
 <script>
 // =============================================
 // NEWS BOT
@@ -2244,25 +2255,19 @@ async function loadNBNews() {
   const listEl = document.getElementById('nb-list');
   const footerEl = document.getElementById('nb-footer');
   listEl.innerHTML = '<div style="color:#5a5650;font-size:10px;padding:8px;font-family:\'JetBrains Mono\',monospace">Memuat berita...</div>';
-  
   try {
-    let url = '/api/news?limit=10';
-    const data = await fetch(url).then(r => r.json());
+    const data = await fetch('/api/news?limit=10').then(r => r.json());
     let articles = data.articles || [];
-    
-    // Filter by watchlist if tab = watchlist
     if (nbTab === 'watchlist' && typeof watchlist !== 'undefined' && watchlist.length) {
       articles = articles.filter(a => {
         const tickers = (a.tickers || '').toUpperCase();
         return watchlist.some(t => tickers.includes(t));
       });
     }
-    
     if (!articles.length) {
       listEl.innerHTML = '<div style="color:#5a5650;font-size:10px;padding:12px;text-align:center;font-family:\'JetBrains Mono\',monospace">📭 Tidak ada berita</div>';
       return;
     }
-    
     listEl.innerHTML = articles.map(a => {
       const tickers = (a.tickers || '').split(',').filter(Boolean);
       const tags = tickers.map(t => `<span style="background:rgba(201,169,74,0.15);color:#c9a94a;padding:1px 5px;font-size:8px;border-radius:2px;font-family:'JetBrains Mono',monospace">${t.trim()}</span>`).join(' ');
@@ -2274,7 +2279,6 @@ async function loadNBNews() {
           ${tags ? `<div style="margin-top:4px;display:flex;gap:3px;flex-wrap:wrap">${tags}</div>` : ''}
         </div>`;
     }).join('');
-    
     footerEl.textContent = `${articles.length} artikel · ${new Date().toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'})} WIB`;
   } catch(e) {
     listEl.innerHTML = `<div style="color:#e27d7d;font-size:10px;padding:8px;font-family:'JetBrains Mono',monospace">⚠ ${e.message}</div>`;
@@ -2282,8 +2286,6 @@ async function loadNBNews() {
 }
 
 function refreshNewsBot() { loadNBNews(); }
-
-// Auto-refresh news bot setiap 5 menit
 setInterval(() => { if (nbOpen) loadNBNews(); }, 5 * 60 * 1000);
 
 // =============================================
@@ -2292,11 +2294,53 @@ setInterval(() => { if (nbOpen) loadNBNews(); }, 5 * 60 * 1000);
 let abOpen = false;
 let abHistory = [];
 
+// Daftar keyword untuk deteksi konteks
+const CRYPTO_SYMBOLS  = ['BTC','ETH','SOL','XRP','HYPE','USDT','BNB','ADA','DOGE','MATIC','AVAX','LINK'];
+const GOLD_KEYWORDS   = /\bemas\b|gold|antam|xau|perak|silver|xag/i;
+const IGNORE_WORDS    = new Set([
+  'DAN','ATAU','YANG','DENGAN','APA','HARGA','POTENSI','ANALISIS',
+  'BELI','JUAL','KENAPA','BAGAIMANA','APAKAH','UNTUK','DARI','TENTANG',
+  'SAHAM','CRYPTO','EMAS','IDX','IHSG','MARKET','PASAR','TREN',
+]);
+
+/**
+ * FIX UTAMA: Deteksi konteks dari teks user sebelum kirim ke API.
+ * Sebelumnya asset_type selalu 'gold' hardcoded.
+ */
+function detectPayload(text) {
+  const upper = text.toUpperCase();
+
+  // 1. Cek crypto
+  const foundCrypto = CRYPTO_SYMBOLS.find(sym => {
+    const re = new RegExp(`\\b${sym}\\b`);
+    return re.test(upper);
+  });
+  if (foundCrypto) {
+    return { asset_type: 'crypto', ticker: foundCrypto, monthly: 500000, months: 12 };
+  }
+
+  // 2. Cek emas / logam mulia
+  if (GOLD_KEYWORDS.test(text)) {
+    return { asset_type: 'gold', ticker: '', monthly: 500000, months: 12 };
+  }
+
+  // 3. Cek ticker saham IDX (2-5 huruf kapital, bukan kata umum)
+  const candidates = upper.match(/\b([A-Z]{2,5})\b/g) || [];
+  const ticker = candidates.find(t => !IGNORE_WORDS.has(t) && !CRYPTO_SYMBOLS.includes(t));
+
+  if (ticker) {
+    return { asset_type: 'saham', ticker, monthly: 500000, months: 12 };
+  }
+
+  // 4. Default: gold (pertanyaan umum pasar)
+  return { asset_type: 'gold', ticker: '', monthly: 500000, months: 12 };
+}
+
 function toggleAiBot() {
   abOpen = !abOpen;
   document.getElementById('ab-panel').style.display = abOpen ? 'block' : 'none';
   if (abOpen && abHistory.length === 0) {
-    addAbMessage('bot', '👋 Halo! Tanya apa saja soal saham IDX, emas, atau crypto. Saya punya akses ke harga real-time dan berita terkini.');
+    addAbMessage('bot', '👋 Halo! Tanya apa saja soal saham IDX, emas, atau crypto. Contoh:\n• "harga dan potensi WBSA"\n• "analisis BTC sekarang"\n• "emas naik atau turun?"');
   }
 }
 
@@ -2313,10 +2357,14 @@ function addAbMessage(role, text) {
   div.style.cssText = `
     padding:8px 10px;border-radius:8px;font-size:11px;line-height:1.5;
     font-family:'JetBrains Mono',monospace;max-width:90%;
-    ${isBot ? 'background:#1e2a1e;color:#7dc88c;align-self:flex-start;border:1px solid #2a3a2a' 
-            : 'background:#1e2535;color:#e8e4d9;align-self:flex-end;border:1px solid #2d3748'}
+    ${isBot
+      ? 'background:#1e2a1e;color:#7dc88c;align-self:flex-start;border:1px solid #2a3a2a'
+      : 'background:#1e2535;color:#e8e4d9;align-self:flex-end;border:1px solid #2d3748'}
   `;
-  div.innerHTML = text.replace(/\*\*(.*?)\*\*/g,'<b>$1</b>').replace(/\n/g,'<br>');
+  div.innerHTML = text
+    .replace(/\*\*(.*?)\*\*/g, '<b>$1</b>')
+    .replace(/\*(.*?)\*/g, '<i>$1</i>')
+    .replace(/\n/g, '<br>');
   el.appendChild(div);
   el.scrollTop = el.scrollHeight;
 }
@@ -2328,41 +2376,54 @@ function askQuick(q) {
 
 async function sendAiMessage() {
   const input = document.getElementById('ab-input');
-  const text = input.value.trim();
+  const text  = input.value.trim();
   if (!text) return;
-  
+
   input.value = '';
   addAbMessage('user', text);
-  
+
   // Loading indicator
-  const loadingId = 'ab-loading-' + Date.now();
   const loadingDiv = document.createElement('div');
-  loadingDiv.id = loadingId;
   loadingDiv.style.cssText = 'padding:8px 10px;border-radius:8px;font-size:10px;font-family:\'JetBrains Mono\',monospace;color:#5a5650;background:#1e2a1e;align-self:flex-start;border:1px solid #2a3a2a';
   loadingDiv.textContent = '⏳ Menganalisis...';
   document.getElementById('ab-messages').appendChild(loadingDiv);
-  
+  document.getElementById('ab-messages').scrollTop = 9999;
+
+  // ── FIX: Deteksi konteks dari teks user ──
+  const payload = detectPayload(text);
+  payload._free_question = text; // kirim pertanyaan asli ke backend
+
   try {
-    // Kirim ke endpoint dca-predict atau buat endpoint /api/chat baru
-    // Untuk sekarang, pakai dca-predict sebagai AI proxy
     const res = await fetch('/api/dca-predict', {
-      method: 'POST',
+      method:  'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        asset_type: 'gold',  // default, bisa dideteksi dari text
-        monthly: 500000,
-        months: 12,
-        _free_question: text  // flag untuk free question
-      })
+      body:    JSON.stringify(payload),
     });
-    
+
     const data = await res.json();
     loadingDiv.remove();
-    addAbMessage('bot', data.prediction || data.error || 'Tidak ada respons');
-    
+
+    if (data.error) {
+      addAbMessage('bot', '⚠️ ' + data.error);
+    } else {
+      let reply = data.prediction || 'Tidak ada respons dari AI.';
+      // Append sources jika ada
+      if (data.sources && data.sources.length) {
+        reply += '\n\n🌐 <b>Sumber:</b>\n' + data.sources
+          .slice(0, 3)
+          .map(s => `• <a href="${s.url}" target="_blank" rel="noopener" style="color:#c9a94a">${s.title || s.url}</a>`)
+          .join('\n');
+      }
+      addAbMessage('bot', reply);
+    }
+
+    // Save history
+    abHistory.push({ user: text, bot: (data.prediction || '').slice(0, 200) });
+    if (abHistory.length > 10) abHistory.shift();
+
   } catch(e) {
     loadingDiv.remove();
-    addAbMessage('bot', '⚠️ Error: ' + e.message + '\n\nPastikan bot Railway online.');
+    addAbMessage('bot', '⚠️ Error: ' + e.message + '\n\nPastikan bot Railway online dan endpoint /api/dca-predict aktif.');
   }
 }
 </script>
