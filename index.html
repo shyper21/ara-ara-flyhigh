@@ -2376,54 +2376,44 @@ function askQuick(q) {
 
 async function sendAiMessage() {
   const input = document.getElementById('ab-input');
-  const text  = input.value.trim();
+  const text = input.value.trim();
   if (!text) return;
-
   input.value = '';
   addAbMessage('user', text);
 
-  // Loading indicator
+  // Loading
   const loadingDiv = document.createElement('div');
-  loadingDiv.style.cssText = 'padding:8px 10px;border-radius:8px;font-size:10px;font-family:\'JetBrains Mono\',monospace;color:#5a5650;background:#1e2a1e;align-self:flex-start;border:1px solid #2a3a2a';
-  loadingDiv.textContent = '⏳ Menganalisis...';
-  document.getElementById('ab-messages').appendChild(loadingDiv);
-  document.getElementById('ab-messages').scrollTop = 9999;
-
-  // ── FIX: Deteksi konteks dari teks user ──
-  const payload = detectPayload(text);
-  payload._free_question = text; // kirim pertanyaan asli ke backend
+  loadingDiv.className = 'dca-ai-loading'; // reuse style
+  loadingDiv.innerHTML = '<div class="dca-ai-spinner"></div><span>Menganalisis...</span>';
+  loadingDiv.style.cssText = 'padding:8px;display:flex;align-items:center;gap:8px;color:#5a5650;font-size:10px;';
+  const msgContainer = document.getElementById('ab-messages');
+  msgContainer.appendChild(loadingDiv);
+  msgContainer.scrollTop = 9999;
 
   try {
-    const res = await fetch('/api/dca-predict', {
-      method:  'POST',
+    const res = await fetch('/api/ask', {
+      method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body:    JSON.stringify(payload),
+      body: JSON.stringify({ question: text })
     });
-
     const data = await res.json();
     loadingDiv.remove();
 
     if (data.error) {
       addAbMessage('bot', '⚠️ ' + data.error);
     } else {
-      let reply = data.prediction || 'Tidak ada respons dari AI.';
-      // Append sources jika ada
+      let reply = data.reply || 'Tidak ada respons.';
       if (data.sources && data.sources.length) {
-        reply += '\n\n🌐 <b>Sumber:</b>\n' + data.sources
+        reply += '\n\n🌐 Sumber:\n' + data.sources
           .slice(0, 3)
-          .map(s => `• <a href="${s.url}" target="_blank" rel="noopener" style="color:#c9a94a">${s.title || s.url}</a>`)
+          .map(s => `• <a href="${s.uri}" target="_blank" rel="noopener" style="color:#c9a94a">${s.title || s.uri}</a>`)
           .join('\n');
       }
       addAbMessage('bot', reply);
     }
-
-    // Save history
-    abHistory.push({ user: text, bot: (data.prediction || '').slice(0, 200) });
-    if (abHistory.length > 10) abHistory.shift();
-
   } catch(e) {
     loadingDiv.remove();
-    addAbMessage('bot', '⚠️ Error: ' + e.message + '\n\nPastikan bot Railway online dan endpoint /api/dca-predict aktif.');
+    addAbMessage('bot', '⚠️ Error: ' + e.message);
   }
 }
 </script>
